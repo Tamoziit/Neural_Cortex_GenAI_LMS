@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@import "@fontsource/geist-sans";
+@import "@fontsource/geist-mono";
+@import "@fontsource/spectral";
+@import "@fontsource-variable/merriweather";
+@import "@fontsource-variable/montserrat";
+
+
+@theme {
+    --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Merriweather Variable", ui-serif, Georgia, serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+}
 
 .text-primary {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200 font-bold drop-shadow-[0_0_6px_theme(colors.blue.500)];
@@ -55,7 +67,8 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(201, 199, 199, 0.778); /* Dark frosted-glass effect */
+    background: rgba(201, 199, 199, 0.778);
+    /* Dark frosted-glass effect */
     backdrop-filter: blur(6px);
 }
 

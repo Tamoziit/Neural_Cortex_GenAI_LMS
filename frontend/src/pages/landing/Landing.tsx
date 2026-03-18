@@ -30,14 +30,14 @@ const Landing = () => {
             transition={{ duration: 1, ease: "easeOut" }}
           />
           <motion.h1
-            className="text-primary text-[70px] lg:text-[90px] z-10"
+            className="text-primary font-sans text-[70px] lg:text-[90px] z-10"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
           >
             Pheonix
           </motion.h1>
-          <p className="text-subhead text-center max-w-lg">
+          <p className="text-subhead font-mono text-center max-w-lg">
             ... ✨ Tagline here ✨ ...
           </p>
         </div>
