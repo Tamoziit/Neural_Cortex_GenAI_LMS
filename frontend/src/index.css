@@ -12,12 +12,12 @@
     --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-.text-primary {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200 font-bold drop-shadow-[0_0_6px_theme(colors.blue.500)];
+* {
+    @apply font-sans;
 }
 
 .text-primary {
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.964), -1px -1px 2px rgba(0, 0, 0, 0.23);
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-300 font-bold;
 }
 
 .text-secondary {
@@ -29,7 +29,7 @@
 }
 
 .text-subhead {
-    @apply text-white text-lg italic;
+    @apply text-white italic;
 }
 
 .para {
