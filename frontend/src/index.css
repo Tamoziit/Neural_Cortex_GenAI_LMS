@@ -17,11 +17,11 @@
 }
 
 .text-primary {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-300 font-bold;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-300 font-bold tracking-wider;
 }
 
 .text-secondary {
-    @apply font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-300 z-10
+    @apply font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-100 to-cyan-400 z-10
 }
 
 .text-tertiary {
@@ -29,7 +29,7 @@
 }
 
 .text-subhead {
-    @apply text-white italic;
+    @apply text-white italic font-serif;
 }
 
 .para {
@@ -37,7 +37,7 @@
 }
 
 .btn-primary {
-    @apply bg-blue-400 rounded-md font-semibold hover:bg-blue-500 cursor-pointer z-20 active:border-[2.5px] active:border-blue-300 outline-none;
+    @apply bg-cyan-400 rounded-md font-semibold hover:bg-cyan-500 cursor-pointer z-20 active:border-[2.5px] active:border-blue-400 outline-none font-mono;
 }
 
 .btn-secondary {
@@ -45,7 +45,7 @@
 }
 
 .btn-submit {
-    @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus:ring-2 focus:ring-blue-400 py-1.5 px-10 text-lg font-semibold rounded-xl cursor-pointer;
+    @apply bg-blue-400 text-black hover:bg-blue-500 active:bg-blue-700 focus:ring-2 focus:ring-blue-400 py-1.5 px-10 text-lg font-semibold rounded-lg cursor-pointer font-mono tracking-widest;
 }
 
 .input-primary {
