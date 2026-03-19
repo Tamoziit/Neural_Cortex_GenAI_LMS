@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import type { AuthContextProviderProps, AuthContextType, AuthUser } from "../types";
-import toast from "react-hot-toast";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

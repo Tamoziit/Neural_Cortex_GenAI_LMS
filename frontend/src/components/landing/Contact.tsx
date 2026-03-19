@@ -1,9 +1,9 @@
 const Contact = () => {
 	return (
-		<div id="contact" className="mt-10 w-full items-center justify-center p-4 pb-12">
+		<div id="contact" className="mt-16 w-full items-center justify-center p-4 pb-12">
 			<div className="w-full flex flex-col gap-1 items-center justify-center">
-				<h1 className="text-[39px] lg:text-[50px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-300 z-10">Contact</h1>
-				<p className="lg:text-lg italic text-gray-200 text-center">Get in touch with us and resolve all your queries!</p>
+				<h1 className="text-[39px] lg:text-[50px] text-secondary">Contact</h1>
+				<p className="text-subhead">Get in touch with us and resolve all your queries!</p>
 			</div>
 
 			<div className="mt-8 flex flex-col w-full items-center justify-center">

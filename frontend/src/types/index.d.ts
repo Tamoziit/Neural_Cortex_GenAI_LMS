@@ -1,3 +1,6 @@
+import type React from "react";
+import type { IconType } from "react-icons";
+
 export interface SignupParams {
     fullName: string;
     username: string;
@@ -30,3 +33,29 @@ export interface AuthContextType {
 export interface AuthContextProviderProps {
     children: ReactNode;
 }
+
+export interface UserBaseItem {
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+};
+
+export interface RoadmapStep {
+    title: string;
+    bullets: string[];
+    icon: string;
+    alt: string;
+    accent: string;
+};
+
+export interface LearningCard {
+    title: string;
+    description?: string;
+    bullets: string[];
+    icon: IconType;
+    alt: string;
+    accentBorder: string;
+    accentText: string;
+    accentDot: string;
+    accent: string;
+};

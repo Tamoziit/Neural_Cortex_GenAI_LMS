@@ -1,6 +1,9 @@
 import Footer from "../../components/Footer";
 import About from "../../components/landing/About";
 import Contact from "../../components/landing/Contact";
+import LearningRoadmap from "../../components/landing/LearningRoadmap";
+import Modules from "../../components/landing/Modules";
+import UserBase from "../../components/landing/UserBase";
 import LandingNavbar from "../../components/navbars/LandingNavbar";
 import { motion } from "framer-motion";
 
@@ -69,6 +72,9 @@ const Landing = () => {
       </div>
 
       <About />
+      <LearningRoadmap />
+      <UserBase />
+      <Modules />
       <Contact />
       <Footer />
     </>
