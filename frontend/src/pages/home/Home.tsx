@@ -1,31 +1,34 @@
+import CTASection from "../../components/home/CTASection";
+import HeroSection from "../../components/home/HeroSection";
 import AppNavbar from "../../components/navbars/AppNavbar";
+import { CTA_SECTIONS } from "../../constants/CTA";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Home = () => {
-	const {authUser} = useAuthContext();
+	const { authUser, authInstitution } = useAuthContext();
+
+	const isLoggedIn = !!(authUser || authInstitution);
+	const userName = authUser ? authUser.fullName : authInstitution?.name;
+
+	if ((!authUser && !authInstitution) || !userName) {
+		return;
+	}
 
 	return (
 		<>
 			<AppNavbar />
 
-			<div className="flex flex-col md:flex-row items-center justify-around px-16 pt-20">
-				<img
-					src="/Logo.png"
-					alt="Logo"
-					className="size-60 lg:size-[400px]" 
-				/>
+			<HeroSection userName={userName} showScrollHint={isLoggedIn} />
 
-				<div className="flex flex-col items-center md:items-end gap-1">
-					<h1 className="text-gray-200 text-3xl md:text-4xl lg:text-6xl font-semibold text-center">
-						Welcome
-					</h1>
-					<h2 className="text-blue-400 text-4xl md:text-5xl lg:text-7xl font-bold text-center">
-						{authUser?.fullName}
-					</h2>
+			{isLoggedIn && (
+				<div className="bg-[#0a0a0f] w-full">
+					{CTA_SECTIONS.map((section) => (
+						<CTASection key={section.step} {...section} />
+					))}
 				</div>
-			</div>
+			)}
 		</>
-	)
-}
+	);
+};
 
-export default Home
+export default Home;

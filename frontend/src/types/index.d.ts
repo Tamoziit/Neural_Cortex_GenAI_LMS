@@ -139,3 +139,17 @@ export interface SearchableInstitutionSelectProps {
     onChange: (institutionId: string) => void;
     placeholder?: string;
 };
+
+export interface CTAProps {
+    step: string;
+    label: string;
+    title: string;
+    description: string;
+    to: string;
+    cta: string;
+    Icon: ReactNode;
+    accentClass: string;
+    variant: "filled" | "outlined"
+    reverse: boolean
+    divider: boolean
+}
