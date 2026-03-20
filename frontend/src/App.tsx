@@ -9,18 +9,18 @@ import { useAuthContext } from "./context/AuthContext";
 import Profile from "./pages/profile/Profile";
 
 function App() {
-	const { authUser } = useAuthContext();
+	const { authUser, authInstitution } = useAuthContext();
 
 	return (
 		<>
 			<div className="min-h-screen bg-gradient-to-br from-black via-black to-purple-950">
 
 				<Routes>
-					<Route path="/" element={authUser ? <Navigate to="/home" /> : <Landing />} />
-					<Route path="/login" element={authUser ? <Navigate to="/home" /> : <Login />} />
-					<Route path="/signup" element={authUser ? <Navigate to="/home" /> : <Signup />} />
-					<Route path="/home" element={authUser ? <Home /> : <Navigate to="/" />} />
-					<Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/" />} />
+					<Route path="/" element={authUser || authInstitution ? <Navigate to="/home" /> : <Landing />} />
+					<Route path="/login" element={authUser || authInstitution ? <Navigate to="/home" /> : <Login />} />
+					<Route path="/signup" element={authUser || authInstitution ? <Navigate to="/home" /> : <Signup />} />
+					<Route path="/home" element={authUser || authInstitution ? <Home /> : <Navigate to="/" />} />
+					<Route path="/profile" element={authUser || authInstitution ? <Profile /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />

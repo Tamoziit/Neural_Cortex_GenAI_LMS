@@ -22,16 +22,27 @@ const UserSchema = new mongoose.Schema({
     mobileNo: {
         type: String,
         min: 10,
-        max: 10,
-        required: true
+        max: 10
     },
     profilePic: {
         type: String
     },
+    affiliation: {
+        type: String,
+        enum: ["student", "professional"],
+        required: true
+    },
+    institutionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Institution"
+    },
+    verified: {
+        type: Boolean,
+        default: false
+    },
     gender: {
         type: String,
-        enum: ["M", "F", "O"],
-        required: true
+        enum: ["M", "F", "O"]
     }
 }, { timestamps: true });
 
