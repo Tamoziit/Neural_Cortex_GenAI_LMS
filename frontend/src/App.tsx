@@ -10,6 +10,7 @@ import Profile from "./pages/profile/Profile";
 import CreateStudyGroup from "./pages/study-group/CreateStudyGroup";
 import ManageStudyGroups from "./pages/study-group/ManageStudyGroups";
 import StudyGroupDetails from "./pages/study-group/StudyGroupDetails";
+import VerifyUsers from "./pages/verify-users/VerifyUsers";
 
 function App() {
 	const { authUser, authInstitution } = useAuthContext();
@@ -27,6 +28,7 @@ function App() {
 					<Route path="/create-study-group" element={authUser || authInstitution ? <CreateStudyGroup /> : <Navigate to="/" />} />
 					<Route path="/manage-study-groups" element={authUser || authInstitution ? <ManageStudyGroups /> : <Navigate to="/" />} />
 					<Route path="/study-group/:id" element={authUser || authInstitution ? <StudyGroupDetails /> : <Navigate to="/" />} />
+					<Route path="/verify-users" element={authInstitution ? <VerifyUsers /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />
