@@ -13,7 +13,9 @@ export const signup = async (req: Request, res: Response) => {
 			email,
 			password,
 			mobileNo,
-			gender
+			gender,
+			affiliation,
+			institutionId
 		}: UserSignupBody = req.body;
 
 		if (password.length < 6) {
@@ -50,7 +52,9 @@ export const signup = async (req: Request, res: Response) => {
 			email,
 			password: passwordHash,
 			mobileNo,
-			gender
+			gender,
+			affiliation,
+			institutionId
 		});
 
 		if (newUser) {
@@ -67,8 +71,8 @@ export const signup = async (req: Request, res: Response) => {
 				gender: newUser.gender
 			}
 
-			await client.set(`DB-user:${newUser._id}`, JSON.stringify(payload));
-			await client.expire(`DB-user:${newUser._id}`, 30 * 24 * 60 * 60);
+			await client.set(`DN-user:${newUser._id}`, JSON.stringify(payload));
+			await client.expire(`DN-user:${newUser._id}`, 30 * 24 * 60 * 60);
 
 			res.status(201)
 				.header("Authorization", `Bearer ${token}`)
@@ -104,7 +108,7 @@ export const login = async (req: Request, res: Response) => {
 			return;
 		}
 
-		res.cookie("DB-jwt", "", { maxAge: 0 });
+		res.cookie("DN-jwt", "", { maxAge: 0 });
 		const token = generateTokenAndSetCookie(user._id, res);
 		const payload = {
 			token,
@@ -116,8 +120,8 @@ export const login = async (req: Request, res: Response) => {
 			gender: user.gender
 		}
 
-		await client.set(`DB-user:${user._id}`, JSON.stringify(payload));
-		await client.expire(`DB-user:${user._id}`, 30 * 24 * 60 * 60);
+		await client.set(`DN-user:${user._id}`, JSON.stringify(payload));
+		await client.expire(`DN-user:${user._id}`, 30 * 24 * 60 * 60);
 
 		res.status(201)
 			.header("Authorization", `Bearer ${token}`)

@@ -12,6 +12,8 @@ export interface UserSignupBody {
     password: string;
     mobileNo: string;
     gender: "M" | "F" | "O";
+    affiliation?: "student" | "professional";
+    institutionId?: string;
 }
 
 export interface UserLoginBody {
@@ -25,9 +27,16 @@ export interface User {
     username: string;
     email: string;
     password: string;
-    mobileNo: string;
+    mobileNo?: string | null;
     profilePic?: string | null;
-    gender: "M" | "F" | "O";
+    gender?: "M" | "F" | "O" | null;
+}
+
+export interface InstitutionCreateBody {
+    name: string;
+    type: "institute" | "corporate";
+    email: string;
+    password: string;
 }
 
 declare module "express" {
