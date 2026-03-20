@@ -1,6 +1,6 @@
 import type React from "react";
 import type { IconType } from "react-icons";
-import type { Group, InstitutionType, SignupMode } from "./types";
+import type { DifficultyLevel, Group, InstitutionType, SignupMode } from "./types";
 
 export interface SignupParams {
     fullName: string;
@@ -152,4 +152,28 @@ export interface CTAProps {
     variant: "filled" | "outlined"
     reverse: boolean
     divider: boolean
+}
+
+export interface Chapter {
+    id: string;
+    title: string;
+    duration: string;
+    level: DifficultyLevel;
+    assignedTo?: string[];
+}
+
+export interface Module {
+    id: string;
+    title: string;
+    chapters: Chapter[];
+}
+
+export interface StudyGroup {
+    id: number;
+    name: string;
+    domain: string;
+    members: number;
+    progress: number;
+    joinCode: string;
+    modules: Module[];
 }

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import AppNavbar from "../../components/navbars/AppNavbar";
 import { Link } from "react-router-dom";
 import { mockGroups } from "../../constants/studyGroups";
+import toast from "react-hot-toast";
 
 const ManageStudyGroups = () => {
 	return (
@@ -35,35 +36,51 @@ const ManageStudyGroups = () => {
 
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{mockGroups.map((group, idx) => (
-							<motion.div
-								key={group.id}
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.5, delay: idx * 0.1 }}
-								className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all flex flex-col gap-4 cursor-pointer"
-							>
-								<div className="flex justify-between items-start gap-4">
-									<h3 className="text-xl font-semibold text-white">{group.name}</h3>
-									<span className="px-3 py-1 bg-white/10 rounded-full text-xs text-white/80 whitespace-nowrap">
-										{group.members} Members
-									</span>
-								</div>
-								
-								<p className="text-secondary text-sm font-mono">{group.domain}</p>
-								
-								<div className="mt-auto pt-4 border-t border-white/10">
-									<div className="flex justify-between items-center mb-2">
-										<span className="text-xs text-gray-400">Roadmap Progress</span>
-										<span className="text-xs font-semibold text-primary">{group.progress}%</span>
+							<Link key={group.id} to={`/study-group/${group.id}`}>
+								<motion.div
+									initial={{ opacity: 0, y: 20 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ duration: 0.5, delay: idx * 0.1 }}
+									className="h-full bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all flex flex-col gap-4 cursor-pointer"
+								>
+									<div className="flex justify-between items-start gap-4">
+										<h3 className="text-xl font-semibold text-white">{group.name}</h3>
+										<span className="px-3 py-1 bg-white/10 rounded-full text-xs text-white/80 whitespace-nowrap">
+											{group.members} Members
+										</span>
 									</div>
-									<div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-										<div 
-											className="h-full bg-primary rounded-full" 
-											style={{ width: `${group.progress}%` }}
-										/>
+									
+									<p className="text-secondary text-sm font-mono">{group.domain}</p>
+									
+									<div 
+										className="flex items-center gap-2 bg-black/30 w-fit px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/30 transition-colors mt-2"
+										onClick={(e) => {
+											e.preventDefault();
+											navigator.clipboard.writeText(group.joinCode);
+											toast.success("Join code copied!");
+										}}
+									>
+										<span className="text-xs text-gray-400 !font-mono">Join Code:</span>
+										<span className="text-xs tracking-widest text-white !font-mono">{group.joinCode}</span>
+										<svg className="w-3.5 h-3.5 text-gray-400 ml-1 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+										</svg>
 									</div>
-								</div>
-							</motion.div>
+									
+									<div className="mt-auto pt-4 border-t border-white/10">
+										<div className="flex justify-between items-center mb-2">
+											<span className="text-xs text-gray-400">Roadmap Progress</span>
+											<span className="text-xs font-semibold text-primary">{group.progress}%</span>
+										</div>
+										<div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+											<div 
+												className="h-full bg-cyan-400 rounded-full" 
+												style={{ width: `${group.progress}%` }}
+											/>
+										</div>
+									</div>
+								</motion.div>
+							</Link>
 						))}
 
 						{/* Add New Group Card */}
