@@ -34,19 +34,19 @@ const InstitutionSchema = new mongoose.Schema({
     members: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Users"
+            ref: "User"
         }
     ],
     studyGroups: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Groups"
+            ref: "Group"
         }
     ],
     requests: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Users"
+            ref: "User"
         }
     ]
 }, { timestamps: true });

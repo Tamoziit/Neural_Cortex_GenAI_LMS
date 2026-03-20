@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 import client from "../redis/client";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie";
+import Institution from "../models/institutions.model";
 
 export const signup = async (req: Request, res: Response) => {
 	try {
@@ -43,6 +44,12 @@ export const signup = async (req: Request, res: Response) => {
 			return;
 		}
 
+		const institution = await Institution.findById(institutionId);
+		if (!institution) {
+			res.status(400).json({ error: "Cannot find institution" });
+			return;
+		}
+
 		const salt = await bcrypt.genSalt(12);
 		const passwordHash = await bcrypt.hash(password, salt);
 
@@ -58,7 +65,8 @@ export const signup = async (req: Request, res: Response) => {
 		});
 
 		if (newUser) {
-			await newUser.save();
+			institution.requests.push(newUser._id);
+			await Promise.all([newUser.save(), institution.save()]);
 
 			const token = generateTokenAndSetCookie(newUser._id, res);
 			const payload = {

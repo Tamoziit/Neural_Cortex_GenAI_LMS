@@ -67,7 +67,6 @@ const Landing = () => {
               className="w-50 lg:w-100 object-contain"
             />
           </motion.div>
-
         </div>
       </div>
 
