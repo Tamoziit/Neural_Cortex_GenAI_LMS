@@ -1,12 +1,24 @@
-import { useState } from "react";
-import { FaEye, FaEyeSlash, FaLock, FaPhoneAlt, FaRegUser, FaTransgenderAlt, FaUser } from "react-icons/fa";
-import useSignup from "../../hooks/useSignup";
-import Spinner from "../../components/Spinner";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { MdEmail } from "react-icons/md";
+import useCreateInstitution from "../../hooks/useCreateInstitution";
+import useSignup from "../../hooks/useSignup";
+import SignupShell from "../../components/auth/signup/SignupShell";
+import SignupModeSelect from "../../components/auth/signup/SignupModeSelect";
+import StepProgress from "../../components/auth/signup/StepProgress";
+import IndividualPersonalDetailsStep from "../../components/auth/signup/IndividualPersonalDetailsStep";
+import IndividualAffiliationStep from "../../components/auth/signup/IndividualAffiliationStep";
+import SelectInstitutionTypeStep from "../../components/auth/signup/SelectInstitutionTypeStep";
+import InstitutionRequiredDetailsStep from "../../components/auth/signup/InstitutionRequiredDetailsStep";
+import type { Group, SignupMode } from "../../types/types";
 
 const Signup = () => {
-	const [inputs, setInputs] = useState({
+	const { signup, loading: signupLoading } = useSignup();
+	const { loading: createLoading, createInstitution } = useCreateInstitution();
+
+	const [mode, setMode] = useState<SignupMode | null>(null);
+	const [step, setStep] = useState(0); // per-mode step index
+
+	const [personal, setPersonal] = useState({
 		fullName: "",
 		username: "",
 		email: "",
@@ -14,149 +26,142 @@ const Signup = () => {
 		mobileNo: "",
 		gender: ""
 	});
-	const { signup, loading } = useSignup();
-	const [showPassword, setShowPassword] = useState(false);
 
-	const togglePasswordVisibility = () => {
-		setShowPassword((prevState) => !prevState);
+	const [group, setGroup] = useState<Group | null>(null);
+	const [institutionId, setInstitutionId] = useState<string | undefined>(undefined);
+
+	const [institutionType, setInstitutionType] = useState<"institute" | "corporate" | null>(null);
+	const [institutionForm, setInstitutionForm] = useState({
+		name: "",
+		email: "",
+		password: ""
+	});
+
+	const title = useMemo(() => {
+		if (mode === "institution") return "Create an Institution";
+		return "Signup";
+	}, [mode]);
+
+	const resetAll = () => {
+		setMode(null);
+		setStep(0);
+		setPersonal({
+			fullName: "",
+			username: "",
+			email: "",
+			password: "",
+			mobileNo: "",
+			gender: ""
+		});
+		setGroup(null);
+		setInstitutionId(undefined);
+		setInstitutionType(null);
+		setInstitutionForm({ name: "", email: "", password: "" });
 	};
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		await signup(inputs);
-	}
-
 	return (
-		<div className="flex flex-col gap-3 items-center justify-center min-h-screen w-full pb-6">
-			<h1 className="text-[30px] md:text-[35px] lg:text-[40px] text-secondary">Signup</h1>
-			<div className="h-[3.3px] -mt-1 bg-blue-400 w-10 rounded-lg" />
+		<SignupShell title={title} subtitle={mode ? "Fill the form step-by-step" : "Choose your path to get started"}>
+			{!mode && (
+				<div className="flex flex-col gap-4 items-stretch">
+					<SignupModeSelect
+						onSelect={(m) => {
+							setMode(m);
+							setStep(0);
+						}}
+					/>
 
-			<div className="flex w-full items-center justify-center">
-				<div className="flex overflow-hidden">
-					<div className="hidden lg:flex items-center justify-center w-[450px] glassmorphic p-4 rounded-lg lg:!rounded-none lg:!rounded-l-lg">
-						<img src="/Logo.png" alt="signup" className="object-cover  h-[400px]" />
+					<div className="flex -mt-2 w-full items-center justify-center">
+						<Link to="/login" className="text-gray-400 hover:text-blue-600">
+							Already have an account? Login
+						</Link>
 					</div>
-
-					<form className="flex flex-col gap-4 items-start justify-center glassmorphic p-4 w-[320px] md:w-[380px] lg:w-[450px] rounded-lg lg:!rounded-none lg:!rounded-r-lg" onSubmit={handleSubmit}>
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><FaUser />Full Name</label>
-							<input
-								type="text"
-								placeholder="Enter your Name"
-								required
-								className="input-primary"
-								value={inputs.fullName}
-								onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
-							/>
-						</div>
-
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><FaRegUser />Username</label>
-							<input
-								type="text"
-								placeholder="Enter your Name"
-								required
-								className="input-primary"
-								value={inputs.username}
-								onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
-							/>
-						</div>
-
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><MdEmail />Email</label>
-							<input
-								type="email"
-								placeholder="Enter your Email"
-								required
-								className="input-primary"
-								value={inputs.email}
-								onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
-							/>
-						</div>
-
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><FaLock />Password</label>
-							<div className="relative">
-								<input
-									type={showPassword ? "text" : "password"}
-									placeholder="Enter your Password"
-									required
-									className="input-primary w-full pr-10"
-									value={inputs.password}
-									onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
-								/>
-								<button
-									type="button"
-									className="absolute right-2 top-1/2 transform -translate-y-1/2 mr-1.5 text-gray-400 hover:text-gray-600 cursor-pointer"
-									onClick={togglePasswordVisibility}
-								>
-									{showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-								</button>
-							</div>
-						</div>
-
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><FaPhoneAlt />Mobile Number</label>
-							<input
-								type="text"
-								placeholder="Enter your Mobile Number"
-								required
-								className="input-primary"
-								value={inputs.mobileNo}
-								onChange={(e) => setInputs({ ...inputs, mobileNo: e.target.value })}
-							/>
-						</div>
-
-						<div className="flex flex-col gap-1 w-full">
-							<label className="text-lg font-medium text-gray-300 flex items-center gap-1.5"><FaTransgenderAlt />Gender</label>
-							<div className="flex justify-around w-full text-gray-300">
-								<label className="flex items-center">
-									<input
-										type="radio"
-										name="gender"
-										className="mr-2"
-										value="M"
-										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
-									/>
-									MALE
-								</label>
-								<label className="flex items-center">
-									<input
-										type="radio"
-										name="gender"
-										className="mr-2"
-										value="F"
-										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
-									/>
-									FEMALE
-								</label>
-								<label className="flex items-center">
-									<input
-										type="radio"
-										name="gender"
-										className="mr-2"
-										value="O"
-										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
-									/>
-									OTHERS
-								</label>
-							</div>
-						</div>
-
-						<div className="flex items-start justify-center p-2 w-full">
-							<button className="btn-submit w-full lg:w-[90%]" type="submit" disabled={loading}>
-								{loading ? <Spinner size="small" /> : "Signup"}
-							</button>
-						</div>
-
-						<div className="flex -mt-5 -mb-0.5 w-full items-center justify-center">
-							<Link to="/login" className="text-gray-400 hover:text-blue-600">Already have an Account? Login</Link>
-						</div>
-					</form>
 				</div>
-			</div>
-		</div>
-	)
-}
+			)}
+
+			{mode === "individual" && (
+				<div className="w-full flex flex-col gap-4">
+					<StepProgress
+						steps={["Personal details", "Affiliation"]}
+						activeIndex={step}
+					/>
+
+					{step === 0 && (
+						<IndividualPersonalDetailsStep
+							value={personal}
+							onChange={setPersonal}
+							onNext={() => setStep(1)}
+						/>
+					)}
+
+					{step === 1 && (
+						<IndividualAffiliationStep
+							group={group}
+							institutionId={institutionId}
+							onGroupChange={(g) => {
+								setGroup(g);
+								setInstitutionId(undefined);
+							}}
+							onInstitutionIdChange={(id) => setInstitutionId(id)}
+							onBack={() => setStep(0)}
+							loading={signupLoading}
+							onSubmit={async ({ affiliation, institutionId }) => {
+								await signup({
+									...personal,
+									affiliation,
+									institutionId
+								});
+							}}
+						/>
+					)}
+
+					<div className="flex items-center justify-center w-full gap-3">
+						<button type="button" className="px-6 !font-mono text-gray-400 underline text-sm cursor-pointer" onClick={resetAll}>
+							Switch to other mode
+						</button>
+					</div>
+				</div>
+			)}
+
+			{mode === "institution" && (
+				<div className="w-full flex flex-col gap-4">
+					<StepProgress steps={["Type", "Registration"]} activeIndex={step} />
+
+					{step === 0 && (
+						<SelectInstitutionTypeStep
+							value={institutionType}
+							onChange={(t) => setInstitutionType(t)}
+							onNext={() => {
+								if (!institutionType) return;
+								setStep(1);
+							}}
+						/>
+					)}
+
+					{step === 1 && institutionType && (
+						<InstitutionRequiredDetailsStep
+							type={institutionType}
+							value={institutionForm}
+							onChange={setInstitutionForm}
+							onBack={() => setStep(0)}
+							loading={createLoading}
+							onSubmit={async () => {
+								await createInstitution({
+									...institutionForm,
+									type: institutionType
+								});
+							}}
+						/>
+					)}
+
+					<div className="flex -mt-2 w-full items-center justify-center">
+						<Link to="/login" className="text-gray-400 hover:text-blue-600">
+							Already have an account? Login
+						</Link>
+					</div>
+				</div>
+			)}
+		</SignupShell>
+	);
+};
 
 export default Signup;

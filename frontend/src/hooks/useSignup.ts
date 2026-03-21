@@ -14,7 +14,9 @@ const useSignup = () => {
         email,
         password,
         mobileNo,
-        gender
+        gender,
+        affiliation,
+        institutionId
     }: SignupParams) => {
         const success = handleInputErrors({
             fullName,
@@ -22,7 +24,9 @@ const useSignup = () => {
             email,
             password,
             mobileNo,
-            gender
+            gender,
+            affiliation,
+            institutionId
         });
         if (!success) return;
 
@@ -40,7 +44,9 @@ const useSignup = () => {
                     email,
                     password,
                     mobileNo,
-                    gender
+                    gender,
+                    affiliation,
+                    institutionId
                 })
             });
             const data = await res.json();
@@ -53,9 +59,9 @@ const useSignup = () => {
             const now = new Date().getTime();
             const expiry = now + 30 * 24 * 60 * 60 * 1000; // 30 days
 
-            localStorage.setItem("DB-token", data.token);
-            localStorage.setItem("DB-user", JSON.stringify(data));
-            localStorage.setItem("DB-expiry", expiry.toString());
+            localStorage.setItem("DN-token", data.token);
+            localStorage.setItem("DN-user", JSON.stringify(data));
+            localStorage.setItem("DN-expiry", expiry.toString());
             setAuthUser(data);
 
             if (data) {
@@ -84,7 +90,9 @@ function handleInputErrors({
     email,
     password,
     mobileNo,
-    gender
+    gender,
+    affiliation,
+    institutionId
 }: SignupParams) {
     if (!fullName || !username || !email || !password || !mobileNo || !gender) {
         toast.error("Please fill all the fields");
@@ -108,6 +116,11 @@ function handleInputErrors({
 
     if(gender !== "M" && gender !== "F" && gender !== "O") {
         toast.error("Enter a valid gender");
+        return false;
+    }
+
+    if (affiliation && !institutionId) {
+        toast.error("Please select an institution for your affiliation");
         return false;
     }
 

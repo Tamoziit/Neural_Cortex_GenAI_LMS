@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Spinner from "../../components/Spinner";
 import { Link } from "react-router-dom";
-import useLogin from "../../hooks/useLogin";
+import useLogin, { type LoginType } from "../../hooks/useLogin";
 
 const ApplicantLogin = () => {
 	const [inputs, setInputs] = useState({
@@ -11,6 +11,7 @@ const ApplicantLogin = () => {
 	});
 	const { login, loading } = useLogin();
 	const [showPassword, setShowPassword] = useState(false);
+	const [loginType, setLoginType] = useState<LoginType>("individual");
 
 	const togglePasswordVisibility = () => {
 		setShowPassword((prevState) => !prevState);
@@ -18,18 +19,35 @@ const ApplicantLogin = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		await login(inputs);
+		await login(inputs, loginType);
 	}
 
 	return (
 		<div className="flex flex-col gap-3 items-center justify-center min-h-screen w-full">
 			<h1 className="text-[30px] md:text-[35px] lg:text-[40px] text-secondary">Login</h1>
-			<div className="h-[3.3px] -mt-1 bg-blue-400 w-10 rounded-lg" />
+			<div className="h-[3.3px] -mt-1 bg-blue-400 w-10 rounded-lg mb-4" />
+
+			<div className="flex gap-4 mb-2">
+				<button 
+					type="button" 
+					className={`px-4 py-2 font-semibold rounded-lg transition-colors ${loginType === 'individual' ? 'bg-blue-600 text-white' : 'glassmorphic text-gray-400 hover:text-white'}`}
+					onClick={() => setLoginType("individual")}
+				>
+					Individual
+				</button>
+				<button 
+					type="button" 
+					className={`px-4 py-2 font-semibold rounded-lg transition-colors ${loginType === 'institution' ? 'bg-blue-600 text-white' : 'glassmorphic text-gray-400 hover:text-white'}`}
+					onClick={() => setLoginType("institution")}
+				>
+					Institution
+				</button>
+			</div>
 
 			<div className="flex w-full items-center justify-center">
 				<div className="flex overflow-hidden">
 					<div className="hidden lg:flex items-center justify-center w-[450px] glassmorphic p-4 rounded-lg lg:!rounded-none lg:!rounded-l-lg">
-						<img src="/Logo.png" alt="logo" className="object-cover  h-[400px]" />
+						<img src="/DN_Logo.gif" alt="logo" className="object-cover h-[400px]" />
 					</div>
 
 					<form className="flex flex-col gap-7 items-start justify-center glassmorphic p-4 w-[320px] md:w-[380px] lg:w-[450px] rounded-lg lg:!rounded-none lg:!rounded-r-lg" onSubmit={handleSubmit}>
@@ -37,7 +55,7 @@ const ApplicantLogin = () => {
 							<label className="text-lg font-medium text-gray-300">Email</label>
 							<input
 								type="email"
-								placeholder="Enter your Email"
+								placeholder={`Enter your ${loginType === 'institution' ? 'Institution ' : ''}Email`}
 								required
 								className="input-primary"
 								value={inputs.email}
@@ -73,7 +91,7 @@ const ApplicantLogin = () => {
 						</div>
 
 						<div className="flex -mt-7 w-full items-center justify-center">
-							<Link to="/signup" className="text-gray-400 hover:text-blue-600">Don't have an Account? Signup</Link>
+							<Link to={loginType === 'individual' ? "/signup" : "/institution-signup"} className="text-gray-400 hover:text-blue-600">Don't have an Account? Signup</Link>
 						</div>
 					</form>
 				</div>

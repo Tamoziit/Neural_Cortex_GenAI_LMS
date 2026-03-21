@@ -34,8 +34,8 @@ const LandingNavbar = () => {
 	return (
 		<div className="py-2 px-8 absolute left-0 top-0 w-full text-white flex items-center justify-between glassmorphic z-20">
 			<div className="flex items-center gap-3">
-				<img src="/Logo.png" alt="logo" className="w-[45px]" />
-				<span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Pheonix</span>
+				<img src="/Logo.jpg" alt="logo" className="w-[45px] rounded-full" />
+				<span className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-400">Neural Cortex</span>
 			</div>
 
 			{/* Hamburger Icon for Mobile */}

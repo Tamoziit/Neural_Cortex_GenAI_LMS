@@ -1,15 +1,27 @@
 @import "tailwindcss";
+@import "@fontsource/geist-sans";
+@import "@fontsource/geist-mono";
+@import "@fontsource/spectral";
+@import "@fontsource-variable/merriweather";
+@import "@fontsource-variable/montserrat";
 
-.text-primary {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200 font-bold drop-shadow-[0_0_6px_theme(colors.blue.500)];
+
+@theme {
+    --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Merriweather Variable", ui-serif, Georgia, serif;
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+* {
+    @apply font-sans;
 }
 
 .text-primary {
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.964), -1px -1px 2px rgba(0, 0, 0, 0.23);
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-cyan-300 font-bold tracking-wider;
 }
 
 .text-secondary {
-    @apply font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-blue-300 z-10
+    @apply font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-100 to-cyan-400 z-10
 }
 
 .text-tertiary {
@@ -17,7 +29,7 @@
 }
 
 .text-subhead {
-    @apply text-white text-lg italic;
+    @apply text-white italic font-serif;
 }
 
 .para {
@@ -25,7 +37,7 @@
 }
 
 .btn-primary {
-    @apply bg-blue-400 rounded-md font-semibold hover:bg-blue-500 cursor-pointer z-20 active:border-[2.5px] active:border-blue-300 outline-none;
+    @apply bg-cyan-400 rounded-md font-semibold hover:bg-cyan-500 cursor-pointer z-20 active:border-[2.5px] active:border-blue-400 outline-none font-mono;
 }
 
 .btn-secondary {
@@ -33,7 +45,7 @@
 }
 
 .btn-submit {
-    @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus:ring-2 focus:ring-blue-400 py-1.5 px-10 text-lg font-semibold rounded-xl cursor-pointer;
+    @apply bg-blue-400 text-black hover:bg-blue-500 active:bg-blue-700 focus:ring-2 focus:ring-blue-400 py-1.5 px-10 text-lg font-semibold rounded-lg cursor-pointer font-mono tracking-widest;
 }
 
 .input-primary {
@@ -55,7 +67,8 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(201, 199, 199, 0.778); /* Dark frosted-glass effect */
+    background: rgba(201, 199, 199, 0.778);
+    /* Dark frosted-glass effect */
     backdrop-filter: blur(6px);
 }
 

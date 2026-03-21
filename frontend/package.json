@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/merriweather": "^5.2.6",
+    "@fontsource-variable/montserrat": "^5.2.8",
+    "@fontsource/geist-mono": "^5.2.7",
+    "@fontsource/geist-sans": "^5.2.5",
+    "@fontsource/spectral": "^5.2.8",
     "@tailwindcss/vite": "^4.1.8",
     "framer-motion": "^12.17.0",
     "react": "^19.1.0",

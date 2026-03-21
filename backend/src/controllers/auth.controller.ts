@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import bcrypt from "bcryptjs";
 import client from "../redis/client";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie";
+import Institution from "../models/institutions.model";
 
 export const signup = async (req: Request, res: Response) => {
 	try {
@@ -13,7 +14,9 @@ export const signup = async (req: Request, res: Response) => {
 			email,
 			password,
 			mobileNo,
-			gender
+			gender,
+			affiliation,
+			institutionId
 		}: UserSignupBody = req.body;
 
 		if (password.length < 6) {
@@ -41,6 +44,12 @@ export const signup = async (req: Request, res: Response) => {
 			return;
 		}
 
+		const institution = await Institution.findById(institutionId);
+		if (!institution) {
+			res.status(400).json({ error: "Cannot find institution" });
+			return;
+		}
+
 		const salt = await bcrypt.genSalt(12);
 		const passwordHash = await bcrypt.hash(password, salt);
 
@@ -50,11 +59,14 @@ export const signup = async (req: Request, res: Response) => {
 			email,
 			password: passwordHash,
 			mobileNo,
-			gender
+			gender,
+			affiliation,
+			institutionId
 		});
 
 		if (newUser) {
-			await newUser.save();
+			institution.requests.push(newUser._id);
+			await Promise.all([newUser.save(), institution.save()]);
 
 			const token = generateTokenAndSetCookie(newUser._id, res);
 			const payload = {
@@ -67,8 +79,8 @@ export const signup = async (req: Request, res: Response) => {
 				gender: newUser.gender
 			}
 
-			await client.set(`DB-user:${newUser._id}`, JSON.stringify(payload));
-			await client.expire(`DB-user:${newUser._id}`, 30 * 24 * 60 * 60);
+			await client.set(`DN-user:${newUser._id}`, JSON.stringify(payload));
+			await client.expire(`DN-user:${newUser._id}`, 30 * 24 * 60 * 60);
 
 			res.status(201)
 				.header("Authorization", `Bearer ${token}`)
@@ -104,7 +116,7 @@ export const login = async (req: Request, res: Response) => {
 			return;
 		}
 
-		res.cookie("DB-jwt", "", { maxAge: 0 });
+		res.cookie("DN-jwt", "", { maxAge: 0 });
 		const token = generateTokenAndSetCookie(user._id, res);
 		const payload = {
 			token,
@@ -116,8 +128,8 @@ export const login = async (req: Request, res: Response) => {
 			gender: user.gender
 		}
 
-		await client.set(`DB-user:${user._id}`, JSON.stringify(payload));
-		await client.expire(`DB-user:${user._id}`, 30 * 24 * 60 * 60);
+		await client.set(`DN-user:${user._id}`, JSON.stringify(payload));
+		await client.expire(`DN-user:${user._id}`, 30 * 24 * 60 * 60);
 
 		res.status(201)
 			.header("Authorization", `Bearer ${token}`)
@@ -141,8 +153,8 @@ export const logout = async (req: Request, res: Response) => {
 	try {
 		const userId = req.params.id;
 
-		res.cookie("DB-jwt", "", { maxAge: 0 });
-		await client.del(`DB-user:${userId}`);
+		res.cookie("DN-jwt", "", { maxAge: 0 });
+		await client.del(`DN-user:${userId}`);
 
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error) {

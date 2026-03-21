@@ -44,7 +44,7 @@ const Footer = () => {
 					</a>
 				</div>
 				<p className="text-sm text-gray-400">
-					&copy; 2024, Tamojit Das. All rights reserved.
+					&copy; 2026, Neural Cortex LLP. All rights reserved.
 				</p>
 			</div>
 		</footer>

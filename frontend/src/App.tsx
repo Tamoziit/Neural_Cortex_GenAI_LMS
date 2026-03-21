@@ -7,20 +7,28 @@ import Login from "./pages/auth/Login";
 import Home from "./pages/home/Home";
 import { useAuthContext } from "./context/AuthContext";
 import Profile from "./pages/profile/Profile";
+import CreateStudyGroup from "./pages/study-group/CreateStudyGroup";
+import ManageStudyGroups from "./pages/study-group/ManageStudyGroups";
+import StudyGroupDetails from "./pages/study-group/StudyGroupDetails";
+import VerifyUsers from "./pages/verify-users/VerifyUsers";
 
 function App() {
-	const { authUser } = useAuthContext();
+	const { authUser, authInstitution } = useAuthContext();
 
 	return (
 		<>
-			<div className="min-h-screen bg-gradient-to-br from-slate-800 to-black">
+			<div className="min-h-screen bg-gradient-to-br from-black via-black to-purple-950">
 
 				<Routes>
-					<Route path="/" element={authUser ? <Navigate to="/home" /> : <Landing />} />
-					<Route path="/login" element={authUser ? <Navigate to="/home" /> : <Login />} />
-					<Route path="/signup" element={authUser ? <Navigate to="/home" /> : <Signup />} />
-					<Route path="/home" element={authUser ? <Home /> : <Navigate to="/" />} />
-					<Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/" />} />
+					<Route path="/" element={authUser || authInstitution ? <Navigate to="/home" /> : <Landing />} />
+					<Route path="/login" element={authUser || authInstitution ? <Navigate to="/home" /> : <Login />} />
+					<Route path="/signup" element={authUser || authInstitution ? <Navigate to="/home" /> : <Signup />} />
+					<Route path="/home" element={authUser || authInstitution ? <Home /> : <Navigate to="/" />} />
+					<Route path="/profile" element={authUser || authInstitution ? <Profile /> : <Navigate to="/" />} />
+					<Route path="/create-study-group" element={authUser || authInstitution ? <CreateStudyGroup /> : <Navigate to="/" />} />
+					<Route path="/manage-study-groups" element={authUser || authInstitution ? <ManageStudyGroups /> : <Navigate to="/" />} />
+					<Route path="/study-group/:id" element={authUser || authInstitution ? <StudyGroupDetails /> : <Navigate to="/" />} />
+					<Route path="/verify-users" element={authInstitution ? <VerifyUsers /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />
