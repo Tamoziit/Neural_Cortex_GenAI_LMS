@@ -2,7 +2,6 @@ import Footer from "../../components/Footer";
 import CTASection from "../../components/home/CTASection";
 import HeroSection from "../../components/home/HeroSection";
 import Contact from "../../components/landing/Contact";
-import LearningRoadmap from "../../components/landing/LearningRoadmap";
 import AppNavbar from "../../components/navbars/AppNavbar";
 import { CTA_SECTIONS } from "../../constants/CTA";
 import { useAuthContext } from "../../context/AuthContext";
@@ -35,7 +34,7 @@ const Home = () => {
 
 				{/* ── New Study Group Sections ── */}
 				{(authUser || authInstitution) && (
-					<div className="relative z-10 w-full max-w-6xl mt-16 md:mt-24 flex flex-col gap-12 mx-auto px-4 sm:px-6 lg:px-8">
+					<div className="relative z-10 w-full max-w-6xl flex flex-col gap-12 mx-auto px-4 sm:px-6 lg:px-8 py-12">
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
 							{/* Verify Users Card (Institution Only) */}
 							{authInstitution && (

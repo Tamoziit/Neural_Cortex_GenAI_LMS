@@ -3,23 +3,25 @@ import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import type { LoginParams } from "../types";
 
+export type LoginType = "individual" | "institution";
+
 const useLogin = () => {
     const [loading, setLoading] = useState(false);
-    const { setAuthUser } = useAuthContext();
+    const { setAuthUser, setAuthInstitution } = useAuthContext();
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    const login = async ({ email, password }: LoginParams) => {
+    const login = async ({ email, password }: LoginParams, type: LoginType = "individual") => {
         const success = handleInputErrors({ email, password });
 
         if (!success) return;
 
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/auth/login`, {
+            const endpoint = type === "institution" ? `${apiUrl}/institutions/login` : `${apiUrl}/auth/login`;
+            const res = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("DB-token")}`
                 },
                 body: JSON.stringify({ email, password })
             });
@@ -33,10 +35,15 @@ const useLogin = () => {
             const now = new Date().getTime();
             const expiry = now + 30 * 24 * 60 * 60 * 1000; // 30 days
 
-            localStorage.setItem("DB-token", data.token);
-            localStorage.setItem("DB-user", JSON.stringify(data));
-            localStorage.setItem("DB-expiry", expiry.toString());
-            setAuthUser(data);
+            localStorage.setItem("DN-token", data.token);
+            if (type === "institution") {
+                localStorage.setItem("DN-institution", JSON.stringify(data));
+                setAuthInstitution?.(data);
+            } else {
+                localStorage.setItem("DN-user", JSON.stringify(data));
+                setAuthUser?.(data);
+            }
+            localStorage.setItem("DN-expiry", expiry.toString());
 
             if (data) {
                 toast.success("Logged in successfully");
@@ -71,4 +78,4 @@ function handleInputErrors({ email, password }: LoginParams) {
     }
 
     return true;
-}
+}

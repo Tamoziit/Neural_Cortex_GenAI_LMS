@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import Institution from "../models/institutions.model";
 import User from "../models/user.model";
-import type { InstitutionCreateBody } from "../types";
+import type { InstitutionCreateBody, UserLoginBody } from "../types";
 import client from "../redis/client";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie";
 
@@ -84,6 +84,66 @@ export const createInstitution = async (req: Request, res: Response) => {
 	}
 };
 
+export const login = async (req: Request, res: Response) => {
+	try {
+		const { email, password }: UserLoginBody = req.body;
+		const institution = await Institution.findOne({ email });
+		if (!institution) {
+			res.status(400).json({ error: "Cannot find User" });
+			return;
+		}
+
+		const isPasswordCorrect = await bcrypt.compare(password, institution.password || "");
+		if (!isPasswordCorrect) {
+			res.status(400).json({ error: "Invalid Login Credentials" });
+			return;
+		}
+
+		res.cookie("DN-jwt", "", { maxAge: 0 });
+		const token = generateTokenAndSetCookie(institution._id, res);
+		const payload = {
+			token,
+			_id: institution._id,
+			name: institution.name,
+			type: institution.type,
+			email: institution.email,
+			domain: institution.domain ?? null
+		}
+
+		await client.set(`DN-institution:${institution._id}`, JSON.stringify(payload));
+		await client.expire(`DN-institution:${institution._id}`, 30 * 24 * 60 * 60);
+
+		res.status(201)
+			.header("Authorization", `Bearer ${token}`)
+			.json({
+				_id: institution._id,
+				name: institution.name,
+				type: institution.type,
+				email: institution.email,
+				domain: institution.domain ?? null,
+				profilePic: institution.profilePic ?? null,
+				token
+			});
+	} catch (error) {
+		console.log("Error in Login controller", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export const logout = async (req: Request, res: Response) => {
+	try {
+		const institutionId = req.params.id;
+
+		res.cookie("DN-jwt", "", { maxAge: 0 });
+		await client.del(`DN-institution:${institutionId}`);
+
+		res.status(200).json({ message: "Logged out successfully" });
+	} catch (error) {
+		console.log("Error in Logout controller", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
 export const listInstitutions = async (req: Request, res: Response) => {
 	try {
 		const type = req.query.type;
@@ -114,7 +174,7 @@ export const listInstitutions = async (req: Request, res: Response) => {
 export const getRequests = async (req: Request, res: Response) => {
 	try {
 		// req.institution is set by institutionAuth.middleware.ts
-		const instId = (req as any).institution._id; 
+		const instId = (req as any).institution._id;
 		const institution = await Institution.findById(instId).populate("requests", "fullName username email gender profilePic _id");
 
 		if (!institution) {
@@ -159,7 +219,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 			res.status(404).json({ error: "User not found" });
 			return;
 		}
-		
+
 		user.verified = true;
 		await user.save();
 

@@ -1,105 +1,45 @@
-import { useEffect, useRef, useState } from "react";
 import AppNavbar from "../../components/navbars/AppNavbar";
 import { useAuthContext } from "../../context/AuthContext";
 import Spinner from "../../components/Spinner";
-import { FaPen } from "react-icons/fa";
+import ProfileAvatar from "./ProfileAvatar";
+import ProfileDetails from "./ProfileDetails";
 
 const Profile = () => {
-	const { authUser } = useAuthContext();
-	const [profilePic, setProfilePic] = useState(authUser?.profilePic || "");
-	const [uploading, setUploading] = useState(false);
-	const fileInputRef = useRef(null);
+	const { authUser, authInstitution } = useAuthContext();
+	const entity = authUser || authInstitution;
 
-	const getProfilePic = () => {
-		if (!authUser?.profilePic) {
-			const ProfilePic =
-				authUser?.gender === "M"
-					? `https://avatar.iran.liara.run/public/boy?username=${authUser?.fullName}`
-					: `https://avatar.iran.liara.run/public/girl?username=${authUser?.fullName}`;
-
-			setProfilePic(ProfilePic);
-		}
-	}
-
-	const handleProfilePicChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		setUploading(true);
-		const file = e.target.files?.[0];
-		if (file) {
-			// Upload to a cloud storage
-			console.log(file);
-			const previewUrl = URL.createObjectURL(file);
-			setProfilePic(previewUrl);
-		}
-		setUploading(false);
-	}
-
-	useEffect(() => {
-		getProfilePic();
-	}, []);
-
-	if (profilePic == "") return (
+	if (!entity) return (
 		<div className="flex w-full min-h-screen items-center justify-center z-0">
 			<Spinner size="large" />
 		</div>
-	)
+	);
+
+	const isInstitution = !!authInstitution;
 
 	return (
-		<>
+		<div className="relative min-h-screen text-gray-100 flex flex-col font-sans">
+			{/* Background - covers entire page */}
+			<div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center bg-no-repeat">
+				<div className="absolute inset-0 bg-black/40 lg:bg-black/20" />
+			</div>
+
 			<AppNavbar />
 
-			<div className="flex w-full min-h-screen items-center justify-center z-0">
-				<div className="glassmorphic-2 flex flex-col gap-2 items-center justify-center p-6 rounded-lg shadow-xl backdrop-blur-lg backdrop-filter mb-10 z-0">
-					<div className="flex items-center justify-center relative">
-						<img
-							src={profilePic}
-							alt={authUser?.username}
-							className="w-[220px] rounded-full object-cover border-2 border-gray-300"
-						/>
-
-						<label
-							htmlFor="profile-pic-upload"
-							className="absolute bottom-0 right-6 bg-gray-700 p-2.5 rounded-full cursor-pointer hover:bg-gray-800 transition"
-						>
-							{uploading ? <Spinner size="medium" /> : (
-								<div>
-									<FaPen className="size-5.5 text-white" />
-									<input
-										type="file"
-										id="profile-pic-upload"
-										className="hidden"
-										accept="image/*"
-										ref={fileInputRef}
-										onChange={handleProfilePicChange}
-									/>
-								</div>
-							)}
-						</label>
+			<div className="flex-1 w-full flex items-center justify-center z-0 p-4 pt-24 pb-12">
+				<div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+					{/* Left Column - Avatar & Core Info */}
+					<div className="col-span-1 flex flex-col gap-6">
+						<ProfileAvatar entity={entity} isInstitution={isInstitution} />
 					</div>
 
-					<span className="font-bold text-xl text-gray-100">{authUser?.username}</span>
-
-					<div className="flex flex-col items-start justify-center">
-						<p className="text-gray-200">
-							<b className="text-blue-400">Name: </b>
-							{authUser?.fullName}
-						</p>
-						<p className="text-gray-200">
-							<b className="text-blue-400">Email: </b>
-							{authUser?.email}
-						</p>
-						<p className="text-gray-200">
-							<b className="text-blue-400">Mobile no.: </b>
-							{authUser?.mobileNo}
-						</p>
-						<p className="text-gray-200">
-							<b className="text-blue-400">Gender: </b>
-							{authUser?.gender === "M" ? "Male" : "Female"}
-						</p>
+					{/* Right Column - Detailed Information */}
+					<div className="col-span-1 lg:col-span-2">
+						<ProfileDetails entity={entity} isInstitution={isInstitution} />
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
 
-export default Profile
+export default Profile;

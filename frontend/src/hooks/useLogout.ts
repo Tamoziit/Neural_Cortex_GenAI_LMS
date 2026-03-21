@@ -4,17 +4,19 @@ import toast from "react-hot-toast";
 
 const useLogout = () => {
     const [loading, setLoading] = useState(false);
-    const { authUser, setAuthUser } = useAuthContext();
+    const { authUser, setAuthUser, authInstitution, setAuthInstitution } = useAuthContext();
     const apiUrl = import.meta.env.VITE_API_URL;
+    const endpoint = authUser ? `${apiUrl}/auth/logout/${authUser?._id}` : `${apiUrl}/institutions/logout/${authInstitution?._id}`;
+    const STORAGE = authUser ? "DN-user" : "DN-institution";
 
     const logout = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/auth/logout/${authUser?._id}`, {
+            const res = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("FGPT-token")}`
+                    Authorization: `Bearer ${localStorage.getItem("DN-token")}`
                 }
             });
             const data = await res.json();
@@ -23,10 +25,11 @@ const useLogout = () => {
                 throw new Error(data.error);
             }
 
-            localStorage.removeItem("DB-token");
-            localStorage.removeItem("DB-user");
-            localStorage.removeItem("DB-expiry");
+            localStorage.removeItem("DN-token");
+            localStorage.removeItem(STORAGE);
+            localStorage.removeItem("DN-expiry");
             setAuthUser(null);
+            setAuthInstitution(null);
 
             if (data) {
                 toast.success("Logged out successfully");
