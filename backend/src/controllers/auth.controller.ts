@@ -153,8 +153,8 @@ export const logout = async (req: Request, res: Response) => {
 	try {
 		const userId = req.params.id;
 
-		res.cookie("DB-jwt", "", { maxAge: 0 });
-		await client.del(`DB-user:${userId}`);
+		res.cookie("DN-jwt", "", { maxAge: 0 });
+		await client.del(`DN-user:${userId}`);
 
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error) {
