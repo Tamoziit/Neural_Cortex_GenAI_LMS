@@ -61,7 +61,7 @@ const SearchableInstitutionSelect = ({
                 params.set("type", institutionType);
                 if (q) params.set("q", q);
 
-                const res = await fetch(`${apiUrl}/institutions?${params.toString()}`, {
+                const res = await fetch(`${apiUrl}/institution/utils?${params.toString()}`, {
                     method: "GET",
                     signal: controller.signal
                 });

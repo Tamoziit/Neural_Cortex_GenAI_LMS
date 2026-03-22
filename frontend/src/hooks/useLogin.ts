@@ -17,7 +17,7 @@ const useLogin = () => {
 
         setLoading(true);
         try {
-            const endpoint = type === "institution" ? `${apiUrl}/institutions/login` : `${apiUrl}/auth/login`;
+            const endpoint = type === "institution" ? `${apiUrl}/institution/auth/login` : `${apiUrl}/user/auth/login`;
             const res = await fetch(endpoint, {
                 method: "POST",
                 headers: {
@@ -78,4 +78,4 @@ function handleInputErrors({ email, password }: LoginParams) {
     }
 
     return true;
-}
+}

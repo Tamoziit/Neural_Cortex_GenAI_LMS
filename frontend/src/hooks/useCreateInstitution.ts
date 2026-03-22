@@ -16,7 +16,7 @@ const useCreateInstitution = () => {
     }: CreateInstitutionParams) => {
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/institutions/create`, {
+            const res = await fetch(`${apiUrl}/institution/auth/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
