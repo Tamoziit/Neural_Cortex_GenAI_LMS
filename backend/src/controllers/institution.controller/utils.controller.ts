@@ -32,8 +32,7 @@ export const listInstitutions = async (req: Request, res: Response) => {
 
 export const getRequests = async (req: Request, res: Response) => {
     try {
-        // req.institution is set by institutionAuth.middleware.ts
-        const instId = (req as any).institution._id;
+        const instId = req.institution?._id;
         const institution = await Institution.findById(instId).populate("requests", "fullName username email gender profilePic _id");
 
         if (!institution) {
@@ -41,7 +40,7 @@ export const getRequests = async (req: Request, res: Response) => {
             return;
         }
 
-        res.status(200).json({ requests: institution.requests });
+        res.status(200).json(institution.requests);
     } catch (error) {
         console.log("Error in getRequests controller", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -50,7 +49,7 @@ export const getRequests = async (req: Request, res: Response) => {
 
 export const verifyUser = async (req: Request, res: Response) => {
     try {
-        const instId = (req as any).institution._id;
+        const instId = req.institution?._id;
         const { userId } = req.params;
 
         if (!userId) {
@@ -58,21 +57,18 @@ export const verifyUser = async (req: Request, res: Response) => {
             return;
         }
 
-        // Find the institution
         const institution = await Institution.findById(instId);
         if (!institution) {
             res.status(404).json({ error: "Institution not found" });
             return;
         }
 
-        // Check if user is in requests array
         const inRequests = institution.requests.some(reqId => reqId.toString() === userId);
         if (!inRequests) {
             res.status(400).json({ error: "User is not in the pending requests list" });
             return;
         }
 
-        // Update User
         const user = await User.findById(userId);
         if (!user) {
             res.status(404).json({ error: "User not found" });
@@ -82,7 +78,6 @@ export const verifyUser = async (req: Request, res: Response) => {
         user.verified = true;
         await user.save();
 
-        // Move from requests to members
         institution.requests = institution.requests.filter(reqId => reqId.toString() !== userId);
         institution.members.push(userId as any);
         await institution.save();

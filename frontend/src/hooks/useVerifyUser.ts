@@ -20,9 +20,13 @@ const useVerifyUser = () => {
 
             toast.success("User verified successfully!");
             return true;
-        } catch (error: any) {
-            toast.error(error.message || "Failed to verify user");
-            return false;
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+                console.log(error);
+            } else {
+                console.log("An unknown error occurred", error);
+            }
         } finally {
             setLoading(false);
         }

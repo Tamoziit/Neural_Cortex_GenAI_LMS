@@ -53,11 +53,11 @@
 }
 
 .glassmorphic {
-    @apply bg-white/5 backdrop-blur-2xl shadow-md border border-white/15
+    @apply bg-white/5 backdrop-blur-2xl shadow-md border-t-0 border border-white/20
 }
 
 .glassmorphic-2 {
-    @apply bg-white/5 backdrop-blur-lg border-2 border-white/40 active:ring-2 active:ring-blue-400
+    @apply bg-white/5 backdrop-blur-2xl border-2 border-white/40;
 }
 
 

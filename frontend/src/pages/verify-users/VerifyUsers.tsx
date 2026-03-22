@@ -1,12 +1,23 @@
 import { motion } from "framer-motion";
 import AppNavbar from "../../components/navbars/AppNavbar";
-import { Link } from "react-router-dom";
 import useInstitutionRequests from "../../hooks/useInstitutionRequests";
 import useVerifyUser from "../../hooks/useVerifyUser";
+import { useEffect, useState } from "react";
+import type { AffiliationRequestsProps } from "../../types";
 
 const VerifyUsers = () => {
-	const { loading: fetching, requests, setRequests } = useInstitutionRequests();
+	const [requests, setRequests] = useState<AffiliationRequestsProps[]>([]);
+	const { loading: fetching, getRequests } = useInstitutionRequests();
 	const { loading: verifying, verifyUser } = useVerifyUser();
+
+	const fetchRequests = async () => {
+		const data = await getRequests();
+		setRequests(data);
+	}
+
+	useEffect(() => {
+		fetchRequests();
+	}, []);
 
 	const handleVerify = async (userId: string) => {
 		const success = await verifyUser(userId);
@@ -21,7 +32,7 @@ const VerifyUsers = () => {
 
 			<div className="relative pt-32 pb-16 px-6 lg:px-16 min-h-screen">
 				<div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col gap-8">
-					<motion.div 
+					<motion.div
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6 }}
@@ -31,13 +42,6 @@ const VerifyUsers = () => {
 							<h1 className="text-4xl lg:text-5xl font-serif text-white mb-2">Pending Requests</h1>
 							<p className="text-gray-400 text-lg">Review and verify user affiliation requests.</p>
 						</div>
-						
-						<Link 
-							to="/home"
-							className="px-6 py-2.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-all text-sm"
-						>
-							Back to Dashboard
-						</Link>
 					</motion.div>
 
 					{fetching ? (
@@ -59,7 +63,7 @@ const VerifyUsers = () => {
 							) : (
 								<div className="flex flex-col divide-y divide-white/5">
 									{requests.map((req, idx) => (
-										<motion.div 
+										<motion.div
 											key={req._id}
 											initial={{ opacity: 0, y: 10 }}
 											animate={{ opacity: 1, y: 0 }}
@@ -81,7 +85,7 @@ const VerifyUsers = () => {
 													</div>
 												</div>
 											</div>
-											
+
 											<button
 												onClick={() => handleVerify(req._id)}
 												disabled={verifying}

@@ -25,9 +25,9 @@ function App() {
 					<Route path="/signup" element={authUser || authInstitution ? <Navigate to="/home" /> : <Signup />} />
 					<Route path="/home" element={authUser || authInstitution ? <Home /> : <Navigate to="/" />} />
 					<Route path="/profile" element={authUser || authInstitution ? <Profile /> : <Navigate to="/" />} />
-					<Route path="/create-study-group" element={authUser || authInstitution ? <CreateStudyGroup /> : <Navigate to="/" />} />
-					<Route path="/manage-study-groups" element={authUser || authInstitution ? <ManageStudyGroups /> : <Navigate to="/" />} />
-					<Route path="/study-group/:id" element={authUser || authInstitution ? <StudyGroupDetails /> : <Navigate to="/" />} />
+					<Route path="/study-groups/create" element={authInstitution ? <CreateStudyGroup /> : <Navigate to="/" />} />
+					<Route path="/study-groups/manage" element={authInstitution ? <ManageStudyGroups /> : <Navigate to="/" />} />
+					<Route path="/study-groups/:id" element={authInstitution ? <StudyGroupDetails /> : <Navigate to="/" />} />
 					<Route path="/verify-users" element={authInstitution ? <VerifyUsers /> : <Navigate to="/" />} />
 				</Routes>
 

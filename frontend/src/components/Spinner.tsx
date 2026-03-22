@@ -21,14 +21,10 @@ const Spinner = ({ size, color }: SpinnerProps) => {
 			<motion.div
 				className={`${sizeClasses} ${colorClasses} rounded-full shadow-lg`}
 				animate={{
-					rotate: 360,
-					scale: [1, 1.2, 1],
-					boxShadow: ["0px 0px 5px rgba(255,255,255,0.2)", "0px 0px 15px rgba(255,255,255,0.8)", "0px 0px 5px rgba(255,255,255,0.2)"],
+					rotate: 360
 				}}
 				transition={{
-					rotate: { duration: 1, repeat: Infinity, ease: "linear" },
-					scale: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
-					boxShadow: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
+					rotate: { duration: 1, repeat: Infinity, ease: "linear" }	
 				}}
 			/>
 		</div>
