@@ -6,7 +6,7 @@ const useLogout = () => {
     const [loading, setLoading] = useState(false);
     const { authUser, setAuthUser, authInstitution, setAuthInstitution } = useAuthContext();
     const apiUrl = import.meta.env.VITE_API_URL;
-    const endpoint = authUser ? `${apiUrl}/auth/logout/${authUser?._id}` : `${apiUrl}/institutions/logout/${authInstitution?._id}`;
+    const endpoint = authUser ? `${apiUrl}/user/auth/logout/${authUser?._id}` : `${apiUrl}/institution/auth/logout/${authInstitution?._id}`;
     const STORAGE = authUser ? "DN-user" : "DN-institution";
 
     const logout = async () => {

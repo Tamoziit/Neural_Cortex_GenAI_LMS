@@ -10,7 +10,7 @@ const useInstitutionRequests = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("DN-token");
-            const res = await fetch(`${apiUrl}/institutions/requests`, {
+            const res = await fetch(`${apiUrl}/institution/utils/requests`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

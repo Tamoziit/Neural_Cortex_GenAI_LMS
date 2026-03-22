@@ -9,7 +9,7 @@ const useVerifyUser = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("DN-token");
-            const res = await fetch(`${apiUrl}/institutions/requests/${userId}/verify`, {
+            const res = await fetch(`${apiUrl}/institution/utils/requests/${userId}/verify`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
