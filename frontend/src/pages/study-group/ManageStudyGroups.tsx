@@ -27,7 +27,7 @@ const ManageStudyGroups = () => {
 						</div>
 						
 						<Link 
-							to="/create-study-group"
+							to="/study-groups/create"
 							className="!px-6 !py-2 btn-secondary !text-sm"
 						>
 							+ Create New Group
@@ -36,7 +36,7 @@ const ManageStudyGroups = () => {
 
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{mockGroups.map((group, idx) => (
-							<Link key={group.id} to={`/study-group/${group.id}`}>
+							<Link key={group.id} to={`/study-groups/${group.id}`}>
 								<motion.div
 									initial={{ opacity: 0, y: 20 }}
 									animate={{ opacity: 1, y: 0 }}
@@ -90,7 +90,7 @@ const ManageStudyGroups = () => {
 							transition={{ duration: 0.5, delay: mockGroups.length * 0.1 }}
 						>
 							<Link
-								to="/create-study-group"
+								to="/study-groups/create"
 								className="h-full border-2 border-dashed border-white/20 rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-primary/50 hover:bg-primary/5 transition-all text-gray-400 hover:text-primary group min-h-[220px]"
 							>
 								<div className="w-16 h-16 rounded-full bg-white/5 group-hover:bg-primary/10 flex items-center justify-center text-3xl mb-2 transition-all">

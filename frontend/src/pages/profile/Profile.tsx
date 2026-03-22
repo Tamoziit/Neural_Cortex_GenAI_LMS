@@ -1,17 +1,15 @@
 import AppNavbar from "../../components/navbars/AppNavbar";
 import { useAuthContext } from "../../context/AuthContext";
-import Spinner from "../../components/Spinner";
-import ProfileAvatar from "./ProfileAvatar";
-import ProfileDetails from "./ProfileDetails";
+import ProfileAvatar from "../../components/profile/ProfileAvatar";
+import ProfileDetails from "../../components/profile/ProfileDetails";
+import DefaultScreen from "../../components/DefaultScreen";
 
 const Profile = () => {
 	const { authUser, authInstitution } = useAuthContext();
 	const entity = authUser || authInstitution;
 
 	if (!entity) return (
-		<div className="flex w-full min-h-screen items-center justify-center z-0">
-			<Spinner size="large" />
-		</div>
+		<DefaultScreen />
 	);
 
 	const isInstitution = !!authInstitution;

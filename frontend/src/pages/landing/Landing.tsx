@@ -39,7 +39,7 @@ const Landing = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
               >
-                Neural Cortex
+                Neuron Cortex
               </motion.h1>
 
               <motion.p

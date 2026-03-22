@@ -27,7 +27,7 @@ const IndividualAffiliationStep = ({
 			</div>
 
 			<div className="flex flex-col gap-4">
-				<div className="glassmorphic-2 p-4 rounded-xl">
+				<div className="bg-white/5 border border-white/20 p-4 rounded-xl">
 					<div className="text-white/80 font-semibold mb-2">Affiliation group</div>
 					<div className="grid grid-cols-2 gap-3">
 						<button
@@ -58,7 +58,7 @@ const IndividualAffiliationStep = ({
 				</div>
 
 				{group && (
-					<div className="glassmorphic-2 p-4 rounded-xl">
+					<div className="bg-white/5 border border-white/20 p-4 rounded-xl">
 						<SearchableInstitutionSelect
 							institutionType={selectedInstitutionType}
 							value={institutionId}

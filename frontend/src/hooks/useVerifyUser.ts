@@ -9,7 +9,7 @@ const useVerifyUser = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("DN-token");
-            const res = await fetch(`${apiUrl}/institutions/requests/${userId}/verify`, {
+            const res = await fetch(`${apiUrl}/institution/utils/requests/${userId}/verify`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -20,9 +20,13 @@ const useVerifyUser = () => {
 
             toast.success("User verified successfully!");
             return true;
-        } catch (error: any) {
-            toast.error(error.message || "Failed to verify user");
-            return false;
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+                console.log(error);
+            } else {
+                console.log("An unknown error occurred", error);
+            }
         } finally {
             setLoading(false);
         }

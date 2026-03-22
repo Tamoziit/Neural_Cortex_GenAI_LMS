@@ -65,7 +65,7 @@ export interface AuthContextProviderProps {
 export interface UserBaseItem {
     title: string;
     description: string;
-    icon: React.ReactNode;
+    icon: IconType;
 };
 
 export interface RoadmapStep {
@@ -140,6 +140,12 @@ export interface SearchableInstitutionSelectProps {
     placeholder?: string;
 };
 
+export interface InstitutionSearchHookProps {
+    institutionType: "institute" | "corporate";
+    query: string,
+    open: boolean
+}
+
 export interface CTAProps {
     step: string;
     label: string;
@@ -176,4 +182,21 @@ export interface StudyGroup {
     progress: number;
     joinCode: string;
     modules: Module[];
+}
+
+export interface InstitutionHomeUtilProps {
+    link: string;
+    icon: IconType;
+    header: string;
+    desc: string;
+    btnTitle: string;
+}
+
+export interface AffiliationRequestsProps {
+    _id: string;
+    fullName: string;
+    username: string;
+    email: string;
+    gender: "M" | "F" | "O";
+    profilePic?: string | null;
 }

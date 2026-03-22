@@ -8,7 +8,7 @@ export const CTA_SECTIONS: CTAProps[] = [
 		title: "Create a Study Group",
 		description:
 			"Curate personalized learning roadmaps for your team. Set technical domains, proficiency levels, and goals to kickstart focused, measurable learning journeys.",
-		to: "/create-study-group",
+		to: "/study-groups/create",
 		cta: "Get Started",
 		Icon: LuUsersRound,
 		accentClass: "blue-300",
@@ -22,7 +22,7 @@ export const CTA_SECTIONS: CTAProps[] = [
 		title: "Manage Study Groups",
 		description:
 			"Monitor progress across your active study groups. Track participant engagement, roadmap completion rates, and overall team performance from a unified dashboard.",
-		to: "/manage-study-groups",
+		to: "/study-groups/manage",
 		cta: "View Dashboard",
 		Icon: LuLayoutDashboard,
 		accentClass: "emerald-300",

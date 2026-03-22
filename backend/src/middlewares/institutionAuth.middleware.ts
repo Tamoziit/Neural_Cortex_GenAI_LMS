@@ -11,14 +11,12 @@ const verifyInstitutionToken = async (req: Request, res: Response, next: NextFun
 			return;
 		}
 
-		// Use the same JWT_SECRET
 		const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload & { userId?: string, _id?: string };
 		if (!decoded) {
 			res.status(401).json({ error: "Unauthorized - Invalid Token" });
 			return;
 		}
 
-		// The decoded token might have `userId` or `_id` depending on how it was generated
 		const id = decoded._id || decoded.userId;
 		if (!id) {
 			res.status(401).json({ error: "Unauthorized - Invalid Token Payload" });
@@ -44,7 +42,7 @@ const verifyInstitutionToken = async (req: Request, res: Response, next: NextFun
 			return;
 		}
 
-		(req as any).institution = institution;
+		req.institution = institution;
 		next();
 	} catch (error) {
 		console.log("Error in verifyInstitutionToken middleware", error);

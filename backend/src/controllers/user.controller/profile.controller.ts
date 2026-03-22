@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../models/user.model";
+import User from "../../models/user.model";
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {

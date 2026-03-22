@@ -14,9 +14,17 @@ const useCreateInstitution = () => {
         email,
         password
     }: CreateInstitutionParams) => {
+        const success = handleInputErrors({
+            name,
+            type,
+            email,
+            password
+        });
+        if (!success) return;
+
         setLoading(true);
         try {
-            const res = await fetch(`${apiUrl}/institutions/create`, {
+            const res = await fetch(`${apiUrl}/institution/auth/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -56,3 +64,33 @@ const useCreateInstitution = () => {
 };
 
 export default useCreateInstitution;
+
+
+function handleInputErrors({
+    name,
+    type,
+    email,
+    password
+}: CreateInstitutionParams) {
+    if (!name || !type || !email || !password) {
+        toast.error("Please fill all the fields");
+        return false;
+    }
+
+    if (name.length < 2) {
+        toast.error("Name should be atleast 2 characters long");
+        return false;
+    }
+
+    if (password.length < 6) {
+        toast.error("Password should be atleast 6 characters long");
+        return false;
+    }
+
+    if (type !== "corporate" && type !== "institute") {
+        toast.error("Specify a valid affiliation");
+        return false;
+    }
+
+    return true;
+}

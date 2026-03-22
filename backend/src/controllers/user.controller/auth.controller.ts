@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { UserLoginBody, UserSignupBody } from "../types";
-import User from "../models/user.model";
+import { UserLoginBody, UserSignupBody } from "../../types";
+import User from "../../models/user.model";
 import bcrypt from "bcryptjs";
-import client from "../redis/client";
-import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie";
-import Institution from "../models/institutions.model";
+import client from "../../redis/client";
+import generateTokenAndSetCookie from "../../utils/generateTokenAndSetCookie";
+import Institution from "../../models/institutions.model";
 
 export const signup = async (req: Request, res: Response) => {
 	try {

@@ -32,6 +32,16 @@ export interface User {
     gender?: "M" | "F" | "O" | null;
 }
 
+export interface Institution {
+    _id: Types.ObjectId,
+    name: string,
+    type: "institute" | "corporate";
+    email: string,
+    mobileNo?: string | null;
+    domain?: string | null;
+    profilePic?: string | null;
+}
+
 export interface InstitutionCreateBody {
     name: string;
     type: "institute" | "corporate";
@@ -42,5 +52,6 @@ export interface InstitutionCreateBody {
 declare module "express" {
     export interface Request {
         user?: User;
+        institution?: Institution;
     }
 }

@@ -49,7 +49,7 @@ const StudyGroupDetails = () => {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6 }}
 					>
-						<Link to="/manage-study-groups" className="text-gray-400 hover:text-white mb-6 inline-flex items-center text-sm font-medium transition-colors">
+						<Link to="/study-groups/manage" className="text-gray-400 hover:text-white mb-6 inline-flex items-center text-sm font-medium transition-colors">
 							&larr; Back to Groups
 						</Link>
 						<div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/10 pb-8 mt-4">
