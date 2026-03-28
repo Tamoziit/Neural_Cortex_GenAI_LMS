@@ -1,16 +1,17 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { useAuthContext } from "./context/AuthContext";
 
 import Landing from "./pages/landing/Landing";
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import Home from "./pages/home/Home";
-import { useAuthContext } from "./context/AuthContext";
 import Profile from "./pages/profile/Profile";
 import CreateStudyGroup from "./pages/study-group/CreateStudyGroup";
 import ManageStudyGroups from "./pages/study-group/ManageStudyGroups";
 import StudyGroupDetails from "./pages/study-group/StudyGroupDetails";
 import VerifyUsers from "./pages/verify-users/VerifyUsers";
+import LearningPath from "./pages/learning-path/LearningPath";
 
 function App() {
 	const { authUser, authInstitution } = useAuthContext();
@@ -29,6 +30,7 @@ function App() {
 					<Route path="/study-groups/manage" element={authInstitution ? <ManageStudyGroups /> : <Navigate to="/" />} />
 					<Route path="/study-groups/:id" element={authInstitution ? <StudyGroupDetails /> : <Navigate to="/" />} />
 					<Route path="/verify-users" element={authInstitution ? <VerifyUsers /> : <Navigate to="/" />} />
+					<Route path="/learning-path" element={authUser ? <LearningPath /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />

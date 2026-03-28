@@ -1,7 +1,8 @@
 import { LuUsersRound, LuLayoutDashboard } from "react-icons/lu";
 import type { CTAProps } from "../types";
+import { RiRoadMapLine } from "react-icons/ri";
 
-export const CTA_SECTIONS: CTAProps[] = [
+export const INSTITUTION_CTA_SECTIONS: CTAProps[] = [
 	{
 		step: "01",
 		label: "Step 01",
@@ -30,4 +31,21 @@ export const CTA_SECTIONS: CTAProps[] = [
 		reverse: true,
 		divider: false,
 	},
+];
+
+export const USER_CTA_SECTIONS: CTAProps[] = [
+	{
+		step: "01",
+		label: "Step 01",
+		title: "Your Learning Path",
+		description:
+			"Navigate a precision-engineered roadmap to master the lifecycle of Generative AI. From foundational LLM orchestration to designing secure, enterprise-grade Agentic systems, this path transforms technical curiosity into architectural mastery.",
+		to: "/learning-path",
+		cta: "Explore",
+		Icon: RiRoadMapLine,
+		accentClass: "blue-300",
+		variant: "filled",
+		reverse: false,
+		divider: true,
+	}
 ];

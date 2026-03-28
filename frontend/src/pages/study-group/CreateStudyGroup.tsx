@@ -53,7 +53,7 @@ const CreateStudyGroup = () => {
 						transition={{ duration: 0.6 }}
 						className="text-center"
 					>
-						<h1 className="text-4xl lg:text-5xl font-serif text-primary mb-4">Create Study Group</h1>
+						<h1 className="text-4xl lg:text-5xl text-primary mb-4">Create Study Group</h1>
 						<p className="text-gray-300 text-lg">Answer a few questions to curate a personalized learning roadmap for your employees.</p>
 					</motion.div>
 
