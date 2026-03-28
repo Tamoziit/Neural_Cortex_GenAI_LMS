@@ -1,6 +1,6 @@
 import type React from "react";
 import type { IconType } from "react-icons";
-import type { DifficultyLevel, Group, InstitutionType, SignupMode } from "./types";
+import type { DifficultyLevel, Group, InstitutionType, NodeLevel, SignupMode } from "./types";
 
 export interface SignupParams {
     fullName: string;
@@ -199,4 +199,82 @@ export interface AffiliationRequestsProps {
     email: string;
     gender: "M" | "F" | "O";
     profilePic?: string | null;
+}
+
+export interface RoadmapPin {
+    moduleId: string;
+    moduleTitle: string;
+    moduleDescription: string;
+    chapters: {
+        id: string;
+        title: string;
+        duration: string;
+        level: "Beginner" | "Intermediate" | "Advanced";
+    }[];
+    /** Position on the twisted path [0..1] */
+    t: number;
+    /** World-space position derived from path */
+    position: [number, number, number];
+    /** Whether the player has unlocked this node */
+    unlocked: boolean;
+    accentGlow: string;
+    accentRing: string;
+}
+
+export interface ProgressStripProps {
+    total: number;
+    unlocked: number;
+    onUnlock: (n: number) => void;
+}
+
+export interface HTMLRoadmapProps {
+    unlockedCount: number;
+    onUnlock: (n: number) => void;
+}
+
+export interface RoadmapChapter {
+    id: string;
+    title: string;
+    duration: string;
+    level: NodeLevel;
+}
+
+export interface RoadmapModule {
+    id: string;
+    title: string;
+    description: string;
+    chapters: RoadmapChapter[];
+}
+
+export interface WalkState {
+    id: number;
+    fromX: number; fromY: number;
+    toX: number; toY: number;
+}
+
+export interface CrabWalkerProps {
+    unlockedCount: number;
+}
+
+export interface PinGLBProps {
+    isUnlocked: boolean;
+    isCurrent: boolean;
+    isNext: boolean;
+    isSelected: boolean;
+    accentGlow: string;
+    hovered: boolean;
+}
+
+export interface MapPinModelProps {
+    isUnlocked: boolean;
+    isCurrent: boolean;
+    isNext: boolean;
+    isSelected: boolean;
+    accentGlow: string;
+    hovered: boolean;
+}
+
+export interface PinInfoCardProps {
+    pin: RoadmapPin | null;
+    onClose: () => void;
 }
