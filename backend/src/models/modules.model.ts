@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const ModuleSchema = new mongoose.Schema({
+    azureCode: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
@@ -8,6 +12,20 @@ const ModuleSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        required: true
+    },
+    level: {
+        type: String,
+        enum: ["Beginner", "Intermediate", "Advanced"],
+        required: true
+    },
+    prerequisites: {
+        type: Array,
+        required: true,
+        default: []
     },
     chapters: [
         {
