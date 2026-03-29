@@ -16,6 +16,7 @@ import userProfileRoutes from "./routes/user.routes/profile.routes";
 
 import institutionAuthRoutes from "./routes/institution.routes/auth.routes";
 import institutionUtilRoutes from "./routes/institution.routes/utils.routes";
+import institutionRoadmapRoutes from "./routes/institution.routes/roadmap.routes";
 
 const PORT = process.env.PORT || 3000;
 
@@ -59,6 +60,7 @@ app.use('/api/v1/user/profile', userProfileRoutes);
 
 app.use('/api/v1/institution/auth', institutionAuthRoutes);
 app.use('/api/v1/institution/utils', institutionUtilRoutes);
+app.use('/api/v1/institution/roadmap', institutionRoadmapRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on PORT: ${PORT}`);

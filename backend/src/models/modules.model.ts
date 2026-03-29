@@ -15,6 +15,16 @@ const ModuleSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+        enum: [
+            "Azure_AI_Engineer",
+            "Azure_DS",
+            "Azure_Administrator",
+            "Azure_Solutions_Architect",
+            "Azure_DevOps_Engineer",
+            "Azure_Data_Engineer",
+            "Azure_Security_Engineer",
+            "Azure_Developer"
+        ],
         required: true
     },
     level: {

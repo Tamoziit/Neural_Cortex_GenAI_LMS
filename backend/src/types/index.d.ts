@@ -55,3 +55,8 @@ declare module "express" {
         institution?: Institution;
     }
 }
+
+export interface AssignRoadmapProps {
+    memberId: Types.ObjectId;
+    role: "Azure_AI_Engineer" | "Azure_DS" | "Azure_Administrator" | "Azure_Solutions_Architect" | "Azure_DevOps_Engineer" | "Azure_Data_Engineer" | "Azure_Security_Engineer" | "Azure_Developer";
+}
