@@ -1,0 +1,4 @@
+pymongo
+openpyxl
+python-dotenv
+datetime
