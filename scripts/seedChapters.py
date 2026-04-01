@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,8 +11,13 @@ from pymongo import MongoClient
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGODB_URI")
-DB_NAME   = os.getenv("DB_NAME", "azure_learning")
+DB_NAME   = os.getenv("DB_NAME", "test")
 XLSX_DIR  = Path(os.getenv("XLSX_DIR", ".")).resolve()
+
+# Matches filenames like Azure_AI_Engineer_Beginner.xlsx
+FILE_PATTERN = re.compile(
+    r"^(?P<role>Azure_[A-Za-z_]+)_(?P<level>Beginner|Intermediate|Advanced)\.xlsx$"
+)
 
 
 def read_sheet(path: Path) -> list[dict]:
@@ -20,7 +26,7 @@ def read_sheet(path: Path) -> list[dict]:
     wb.close()
     if not rows:
         return []
-    headers = [str(h).strip() for h in rows[0]]
+    headers = [str(h).strip() if h is not None else "" for h in rows[0]]
     return [
         {headers[i]: (str(v).strip() if v is not None else "") for i, v in enumerate(row)}
         for row in rows[1:]
@@ -28,76 +34,103 @@ def read_sheet(path: Path) -> list[dict]:
     ]
 
 
+def parse_chapter(row: dict) -> dict:
+    return {
+        "title":     row.get("title", "").strip(),
+        "type":      row.get("type", "").strip().upper(),
+        "duration":  row.get("duration", "").strip(),
+        "azureCode": row.get("azureCode", "").strip(),
+        "url":       row.get("url", "").strip(),
+        "phase":     int(float(row.get("phase", 0) or 0)),
+    }
+
+
 def seed():
     if not MONGO_URI:
-        print("❌  MONGO_URI is not set in .env")
+        print("❌  MONGODB_URI is not set in .env")
         sys.exit(1)
 
     client       = MongoClient(MONGO_URI)
     db           = client[DB_NAME]
     chapters_col = db["chapters"]
     modules_col  = db["modules"]
+    now          = datetime.now(timezone.utc)
 
-    # collect all chapter xlsx files — named like AI-900.xlsx, DP-203.xlsx
-    chapter_files = sorted(XLSX_DIR.glob("*.xlsx"), key=lambda p: p.stem)
-    chapter_files = [f for f in chapter_files if f.stem != "modules"]
+    chapter_files = [
+        (f, FILE_PATTERN.match(f.name))
+        for f in sorted(XLSX_DIR.glob("*.xlsx"))
+        if FILE_PATTERN.match(f.name)
+    ]
 
-    print(f"Found {len(chapter_files)} chapter file(s) in '{XLSX_DIR}'\n")
+    if not chapter_files:
+        print("❌  No chapter files found matching pattern <Role>_<Level>.xlsx")
+        sys.exit(1)
 
-    for file in chapter_files:
-        module_azure_code = file.stem          # e.g. "AI-900"
+    print(f"Found {len(chapter_files)} chapter file(s)\n")
 
-        module = modules_col.find_one({"azureCode": module_azure_code}, {"_id": 1})
-        if not module:
-            print(f"  ⚠  [{module_azure_code}] No matching module in DB — skipping {file.name}")
-            continue
+    # deduplicate on (title, url) — azureCode is not unique across chapters
+    seen      = {}  # (title, url) → chapter doc
+    file_rows = []  # (role, level, parsed_rows) per file
 
-        rows = read_sheet(file)
-        chapter_ids = []
+    for file, match in chapter_files:
+        role  = match.group("role")
+        level = match.group("level")
+        rows  = [parse_chapter(r) for r in read_sheet(file) if r.get("title")]
 
-        for row in rows:
-            azure_code  = row.get("azureCode", "").strip()
-            title       = row.get("title", "").strip()
-            now         = datetime.now(timezone.utc)
+        print(f"  📋  {file.name} → {len(rows)} rows parsed")
 
-            if not azure_code:
-                print(f"    ⚠  Skipping chapter with no azureCode: '{title}'")
-                continue
+        for ch in rows:
+            key = (ch["title"], ch["url"])
+            if key not in seen:
+                seen[key] = {
+                    "title":       ch["title"],
+                    "type":        ch["type"],
+                    "description": [],
+                    "duration":    ch["duration"],
+                    "azureCode":   ch["azureCode"],
+                    "url":         ch["url"],
+                    "createdAt":   now,
+                    "updatedAt":   now,
+                }
 
-            doc = {
-                "title":       title,
-                "description": [p.strip() for p in row.get("description", "").split("||") if p.strip()],
-                "duration":    row.get("duration", ""),
-                "azureCode":   azure_code,
-                "url":         row.get("url", ""),
-                "createdAt":   now,
-            }
+        file_rows.append((role, level, rows))
 
-            result = chapters_col.update_one(
-                {"azureCode": azure_code},
-                {
-                    "$setOnInsert": doc,
-                    "$set":         {"updatedAt": now},
-                },
-                upsert=True,
+    if not seen:
+        print("❌  No chapters collected — check your Excel headers match: title, type, duration, azureCode, phase, url")
+        client.close()
+        sys.exit(1)
+
+    # ── insert all unique chapters ─────────────────────────────────────────────
+    chapters_col.delete_many({})
+    inserted = chapters_col.insert_many(list(seen.values()))
+
+    chapter_id_map = {
+        key: _id
+        for key, _id in zip(seen.keys(), inserted.inserted_ids)
+    }
+
+    print(f"\n✅  {len(inserted.inserted_ids)} unique chapters seeded\n")
+
+    # ── back-reference chapters to their modules by (role, level, phase) ───────
+    for role, level, rows in file_rows:
+        phase_map = {}
+        for ch in rows:
+            _id = chapter_id_map.get((ch["title"], ch["url"]))
+            if _id:
+                phase_map.setdefault(ch["phase"], []).append(_id)
+
+        for phase, chapter_ids in phase_map.items():
+            result = modules_col.update_one(
+                {"role": role, "level": level, "phase": phase},
+                {"$set": {"chapters": chapter_ids, "updatedAt": now}},
             )
-
-            chapter_id = result.upserted_id or chapters_col.find_one({"azureCode": azure_code}, {"_id": 1})["_id"]
-            chapter_ids.append(chapter_id)
-
-            status = "inserted" if result.upserted_id else "exists"
-            print(f"    [{status}] {azure_code} — {title}")
-
-        # back-reference: set chapters array on the module
-        modules_col.update_one(
-            {"_id": module["_id"]},
-            {"$set": {"chapters": chapter_ids}},
-        )
-
-        print(f"  ✅  [{module_azure_code}] {len(chapter_ids)} chapters linked\n")
+            if result.matched_count:
+                print(f"  ✅  [{role} | {level} | Phase {phase}] {len(chapter_ids)} chapters linked")
+            else:
+                print(f"  ⚠   [{role} | {level} | Phase {phase}] no matching module — run seed_modules.py first")
 
     client.close()
-    print("Done.")
+    print("\nDone.")
 
 
 if __name__ == "__main__":

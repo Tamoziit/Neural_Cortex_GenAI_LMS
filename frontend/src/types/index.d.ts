@@ -278,3 +278,97 @@ export interface PinInfoCardProps {
     pin: RoadmapPin | null;
     onClose: () => void;
 }
+
+export interface ProgressBarProps {
+    current: number;
+    total: number;
+}
+
+export interface ResultCardProps {
+    result: EvaluationResult;
+}
+
+export interface PersonaAnswer {
+    _id: string;
+    ans: 0 | 1 | 2 | 3;
+}
+
+export interface EvaluationResult {
+    score: number;
+    total: number;
+    percentage: number;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    learningPath: string;
+}
+
+export interface QuestionOption {
+    label: string;
+}
+
+export interface PersonaQuestion {
+    _id: string;
+    question: string;
+    options: string[];
+}
+
+export interface PersonaQuestionsData {
+    _id: string;
+    role: string;
+    questions: PersonaQuestion[];
+}
+
+export interface QuestionCardProps {
+    question: PersonaQuestion;
+    questionNumber: number;
+    selectedAnswer: number | null;
+    onSelect: (idx: number) => void;
+    direction: number;
+}
+
+export interface LearningPathModule {
+    _id: string;
+    title: string;
+    phase: number;
+    description?: string;
+    role: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    prerequisites: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface LearningPathData {
+    _id: string;
+    userId: string;
+    role: string;
+    type: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    moduleIds: LearningPathModule[];
+    approved: boolean;
+    isSubscribed: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+
+export interface LearningPathHeaderProps {
+    data: LearningPathData;
+    accentText: string;
+}
+
+export interface TimelineCrabProps {
+    /** offsetTop of the currently focused module card (relative to timeline container) */
+    targetY: number;
+    /** Whether the crab should animate walking */
+    walking: boolean;
+}
+
+export interface TimelineModuleCardProps {
+    module: LearningPathModule;
+    index: number;
+    isFocused: boolean;
+    accentColor: string;
+    accentBorder: string;
+    accentText: string;
+    accentGlow: string;
+}

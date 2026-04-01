@@ -13,9 +13,11 @@ import adminRoutes from './routes/admin.routes';
 
 import userAuthRoutes from './routes/user.routes/auth.routes';
 import userProfileRoutes from "./routes/user.routes/profile.routes";
+import userLearningPathRoutes from "./routes/user.routes/learning-path.routes";
 
 import institutionAuthRoutes from "./routes/institution.routes/auth.routes";
 import institutionUtilRoutes from "./routes/institution.routes/utils.routes";
+import institutionRoadmapRoutes from "./routes/institution.routes/recommended-course.routes";
 
 const PORT = process.env.PORT || 3000;
 
@@ -56,9 +58,11 @@ app.use('/api/v1/admin', adminRoutes);
 
 app.use('/api/v1/user/auth', userAuthRoutes);
 app.use('/api/v1/user/profile', userProfileRoutes);
+app.use('/api/v1/user/learning-path', userLearningPathRoutes);
 
 app.use('/api/v1/institution/auth', institutionAuthRoutes);
 app.use('/api/v1/institution/utils', institutionUtilRoutes);
+app.use('/api/v1/institution/recommended-course', institutionRoadmapRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on PORT: ${PORT}`);
