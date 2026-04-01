@@ -34,40 +34,35 @@ def seed():
         sys.exit(1)
 
     client      = MongoClient(MONGO_URI)
-    db          = client[DB_NAME]
-    modules_col = db["modules"]
+    modules_col = client[DB_NAME]["modules"]
+    now         = datetime.now(timezone.utc)
 
-    module_rows = read_sheet(XLSX_DIR / "modules.xlsx")
-    print(f"Seeding {len(module_rows)} modules into '{DB_NAME}'...\n")
+    # modules.xlsx columns: role | phase | title | level | prerequisites
+    rows = read_sheet(XLSX_DIR / "modules.xlsx")
+    print(f"Seeding {len(rows)} modules into '{DB_NAME}'...\n")
 
-    for row in module_rows:
-        azure_code = row.get("azureCode", "").strip()
-        title      = row.get("title", "").strip()
-        now        = datetime.now(timezone.utc)
+    docs = [
+        {
+            "role":          row["role"],
+            "phase":         int(row["phase"]),
+            "title":         row["title"],
+            "level":         row["level"],
+            "prerequisites": [p.strip() for p in row.get("prerequisites", "").split(";") if p.strip()],
+            "chapters":      [],
+            "createdAt":     now,
+            "updatedAt":     now,
+        }
+        for row in rows
+    ]
 
-        modules_col.update_one(
-            {"azureCode": azure_code},
-            {
-                "$set": {
-                    "azureCode":     azure_code,
-                    "title":         title,
-                    "description":   row.get("description", ""),
-                    "role":          row.get("role", ""),
-                    "level":         row.get("level", ""),
-                    "prerequisites": [p.strip() for p in row.get("prerequisites", "").split(";") if p.strip()],
-                    "updatedAt":     now,
-                },
-                "$setOnInsert": {
-                    "createdAt": now,
-                },
-            },
-            upsert=True,
-        )
+    modules_col.delete_many({})
+    modules_col.insert_many(docs)
 
-        print(f"  ✅  [{azure_code}] {title}")
+    for doc in docs:
+        print(f"  ✅  [{doc['role']} | {doc['level']} | Phase {doc['phase']}] {doc['title']}")
 
     client.close()
-    print("\nDone.")
+    print(f"\nDone. {len(docs)} modules seeded.")
 
 
 if __name__ == "__main__":

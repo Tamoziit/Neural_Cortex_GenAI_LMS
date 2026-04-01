@@ -3,7 +3,7 @@ import AppNavbar from "../../components/navbars/AppNavbar";
 import { motion } from "framer-motion";
 import useGetMembers from "../../hooks/useGetMembers";
 import type { AffiliationRequestsProps } from "../../types";
-import MemberCard from "./components/MemberCard";
+import MemberCard from "../../components/MemberCard";
 import Spinner from "../../components/Spinner";
 
 const AssignRoadmap = () => {

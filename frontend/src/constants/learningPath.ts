@@ -1,4 +1,14 @@
 import type { RoadmapStep } from "../types";
+import { 
+    FiCpu, 
+    FiGrid, 
+    FiLayers, 
+    FiRefreshCw, 
+    FiHardDrive, 
+    FiShield, 
+    FiCode,
+    FiActivity
+} from "react-icons/fi";
 
 export const steps: RoadmapStep[] = [
     {
@@ -60,4 +70,26 @@ export const accentBorder: Record<string, string> = {
     "from-emerald-400/20 to-emerald-500/5": "border-emerald-400/30",
     "from-amber-400/20 to-amber-500/5": "border-amber-400/30",
     "from-rose-400/20 to-rose-500/5": "border-rose-400/30",
+};
+
+export const roleIcons: Record<string, any> = {
+    Azure_AI_Engineer: FiCpu,
+    Azure_DS: FiActivity,
+    Azure_Administrator: FiGrid,
+    Azure_Solutions_Architect: FiLayers,
+    Azure_DevOps_Engineer: FiRefreshCw,
+    Azure_Data_Engineer: FiHardDrive,
+    Azure_Security_Engineer: FiShield,
+    Azure_Developer: FiCode
+};
+
+export const roleColors: Record<string, string> = {
+    Azure_AI_Engineer: "from-blue-500/20 via-blue-400/5 to-transparent",
+    Azure_DS: "from-purple-500/20 via-purple-400/5 to-transparent",
+    Azure_Administrator: "from-emerald-500/20 via-emerald-400/5 to-transparent",
+    Azure_Solutions_Architect: "from-amber-500/20 via-amber-400/5 to-transparent",
+    Azure_DevOps_Engineer: "from-pink-500/20 via-pink-400/5 to-transparent",
+    Azure_Data_Engineer: "from-cyan-500/20 via-cyan-400/5 to-transparent",
+    Azure_Security_Engineer: "from-rose-500/20 via-rose-400/5 to-transparent",
+    Azure_Developer: "from-indigo-500/20 via-indigo-400/5 to-transparent"
 };

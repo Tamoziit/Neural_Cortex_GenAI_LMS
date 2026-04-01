@@ -5,9 +5,13 @@ const ChapterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: Array,
+    type: {
+        type: String,
+        enum: ["MODULE", "COURSE", "LEARNING PATH"],
         required: true
+    },
+    description: {
+        type: Array
     },
     duration: {
         type: String,

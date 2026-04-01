@@ -9,7 +9,7 @@ const useAssignRoadmap = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("DN-token");
-            const res = await fetch(`${apiUrl}/institution/roadmap/assign-roadmap`, {
+            const res = await fetch(`${apiUrl}/institution/recommended-course/assign-roadmap`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

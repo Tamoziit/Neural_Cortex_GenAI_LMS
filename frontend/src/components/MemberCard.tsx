@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { AffiliationRequestsProps } from "../../../types";
-import { DEFAULT_ROLES } from "../../../constants/roles";
-import useAssignRoadmap from "../../../hooks/useAssignRoadmap";
+import type { AffiliationRequestsProps } from "../types";
+import { DEFAULT_ROLES } from "../constants/roles";
+import useAssignRoadmap from "../hooks/useAssignRoadmap";
 import { FiUser, FiMail, FiCheckCircle } from "react-icons/fi";
 import { motion } from "framer-motion";
 

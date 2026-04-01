@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AssignRoadmapProps } from "../../types";
 import User from "../../models/user.model";
-import LearningPath from "../../models/learninPath.model";
+import LearningPath from "../../models/learningPath.model";
 import Institution from "../../models/institutions.model";
 
 export const assignRoadmap = async (req: Request, res: Response) => {

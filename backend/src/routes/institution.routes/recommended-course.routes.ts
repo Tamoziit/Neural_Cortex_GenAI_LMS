@@ -1,6 +1,6 @@
 import express from "express";
 import verifyInstitutionToken from "../../middlewares/institutionAuth.middleware";
-import { assignRoadmap } from "../../controllers/institution.controller/roadmap.controller";
+import { assignRoadmap } from "../../controllers/institution.controller/recommended-course.controller";
 
 const router = express.Router();
 

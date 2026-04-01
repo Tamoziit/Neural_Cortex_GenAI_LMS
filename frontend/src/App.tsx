@@ -13,6 +13,8 @@ import StudyGroupDetails from "./pages/study-group/StudyGroupDetails";
 import VerifyUsers from "./pages/verify-users/VerifyUsers";
 import LearningPath from "./pages/learning-path/LearningPath";
 import AssignRoadmap from "./pages/assign-roadmap/AssignRoadmap";
+import RecommendedCourses from "./pages/recommended-courses/RecommendedCourses";
+import PersonaIdentification from "./pages/persona-identification/PersonaIdentification";
 
 function App() {
 	const { authUser, authInstitution } = useAuthContext();
@@ -37,7 +39,9 @@ function App() {
 					<Route path="/assign-roadmap" element={authInstitution ? <AssignRoadmap /> : <Navigate to="/" />} />
 
 					{/* Users */}
+					<Route path="/recommended-courses" element={authUser ? <RecommendedCourses /> : <Navigate to="/" />} />
 					<Route path="/learning-path" element={authUser ? <LearningPath /> : <Navigate to="/" />} />
+					<Route path="/persona-identification/:role" element={authUser ? <PersonaIdentification /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />

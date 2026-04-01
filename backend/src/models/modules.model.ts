@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
 
 const ModuleSchema = new mongoose.Schema({
-    azureCode: {
-        type: String,
-        required: true
-    },
     title: {
         type: String,
         required: true
     },
-    description: {
-        type: String,
+    phase: {
+        type: Number,
         required: true
+    },
+    description: {
+        type: String
     },
     role: {
         type: String,

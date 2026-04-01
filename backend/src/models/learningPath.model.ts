@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const LearningPathSchema = new mongoose.Schema({
     institutionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Institution",
-        required: true
+        ref: "Institution"
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,10 +24,22 @@ const LearningPathSchema = new mongoose.Schema({
         ],
         required: true
     },
-    moduleId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Module"
+    type: {
+        type: String,
+        enum: ["learning-path", "recommended-course"],
+        required: true
     },
+    level: {
+        type: String,
+        enum: ["Beginner", "Intermediate", "Advanced"],
+        required: true
+    },
+    moduleIds: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Module"
+        }
+    ],
     approved: {
         type: Boolean,
         required: true,
