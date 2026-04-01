@@ -110,11 +110,48 @@ export const evaluatePersona = async (req: Request, res: Response) => {
 				total: totalQuestions,
 				percentage,
 				level,
-				learningPath: newLearningPath
+				learningPath: newLearningPath._id
 			});
 		}
 	} catch (error) {
 		console.log("Error in evaluatePersona controller", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export const getLearningPathById = async (req: Request, res: Response) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			res.status(400).json({ error: "Learning path ID is required" });
+			return;
+		}
+
+		const learningPath = await LearningPath.findById(id).populate({
+			path: "moduleIds",
+			select: "-chapters",
+		});
+
+		if (!learningPath) {
+			res.status(400).json({ error: "Learning path not found" });
+			return;
+		}
+
+		if (learningPath.userId.toString() !== req.user?._id.toString()) {
+			res.status(403).json({ error: "Access denied: you do not own this learning path" });
+			return;
+		}
+
+		const sortedModules = (learningPath.moduleIds as any[]).sort(
+			(a, b) => (a.phase ?? 0) - (b.phase ?? 0)
+		);
+
+		res.status(200).json({
+			...learningPath.toObject(),
+			moduleIds: sortedModules,
+		});
+	} catch (error) {
+		console.log("Error in getLearningPathById controller", error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 }

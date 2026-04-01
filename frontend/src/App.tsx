@@ -15,6 +15,7 @@ import LearningPath from "./pages/learning-path/LearningPath";
 import AssignRoadmap from "./pages/assign-roadmap/AssignRoadmap";
 import RecommendedCourses from "./pages/recommended-courses/RecommendedCourses";
 import PersonaIdentification from "./pages/persona-identification/PersonaIdentification";
+import LearningPathId from "./pages/learning-path/LearningPathId";
 
 function App() {
 	const { authUser, authInstitution } = useAuthContext();
@@ -42,6 +43,7 @@ function App() {
 					<Route path="/recommended-courses" element={authUser ? <RecommendedCourses /> : <Navigate to="/" />} />
 					<Route path="/learning-path" element={authUser ? <LearningPath /> : <Navigate to="/" />} />
 					<Route path="/persona-identification/:role" element={authUser ? <PersonaIdentification /> : <Navigate to="/" />} />
+					<Route path="/learning-path/:id" element={authUser ? <LearningPathId /> : <Navigate to="/" />} />
 				</Routes>
 
 				<Toaster />
