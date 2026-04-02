@@ -36,7 +36,7 @@ export const getRequests = async (req: Request, res: Response) => {
         const institution = await Institution.findById(instId).populate("requests", "fullName username email gender profilePic _id");
 
         if (!institution) {
-            res.status(404).json({ error: "Institution not found" });
+            res.status(400).json({ error: "Institution not found" });
             return;
         }
 
@@ -59,7 +59,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 
         const institution = await Institution.findById(instId);
         if (!institution) {
-            res.status(404).json({ error: "Institution not found" });
+            res.status(400).json({ error: "Institution not found" });
             return;
         }
 
@@ -71,7 +71,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 
         const user = await User.findById(userId);
         if (!user) {
-            res.status(404).json({ error: "User not found" });
+            res.status(400).json({ error: "User not found" });
             return;
         }
 
@@ -88,3 +88,20 @@ export const verifyUser = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+export const getMyMembers = async (req: Request, res: Response) => {
+    try {
+        const instId = req.institution?._id;
+        const institution = await Institution.findById(instId).populate("members", "fullName username email gender profilePic _id");
+
+        if (!institution) {
+            res.status(400).json({ error: "Institution not found" });
+            return;
+        }
+
+        res.status(200).json(institution.members);
+    } catch (error) {
+        console.log("Error in getMyUsers controller", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}

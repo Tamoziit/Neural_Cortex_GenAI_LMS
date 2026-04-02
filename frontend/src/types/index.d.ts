@@ -1,6 +1,6 @@
 import type React from "react";
 import type { IconType } from "react-icons";
-import type { DifficultyLevel, Group, InstitutionType, SignupMode } from "./types";
+import type { DifficultyLevel, Group, InstitutionType, NodeLevel, SignupMode } from "./types";
 
 export interface SignupParams {
     fullName: string;
@@ -199,4 +199,229 @@ export interface AffiliationRequestsProps {
     email: string;
     gender: "M" | "F" | "O";
     profilePic?: string | null;
+}
+
+export interface RoadmapPin {
+    moduleId: string;
+    moduleTitle: string;
+    moduleDescription: string;
+    chapters: {
+        id: string;
+        title: string;
+        duration: string;
+        level: "Beginner" | "Intermediate" | "Advanced";
+    }[];
+    /** Position on the twisted path [0..1] */
+    t: number;
+    /** World-space position derived from path */
+    position: [number, number, number];
+    /** Whether the player has unlocked this node */
+    unlocked: boolean;
+    accentGlow: string;
+    accentRing: string;
+}
+
+export interface ProgressStripProps {
+    total: number;
+    unlocked: number;
+    onUnlock: (n: number) => void;
+}
+
+export interface HTMLRoadmapProps {
+    unlockedCount: number;
+    onUnlock: (n: number) => void;
+}
+
+export interface RoadmapChapter {
+    id: string;
+    title: string;
+    duration: string;
+    level: NodeLevel;
+}
+
+export interface RoadmapModule {
+    id: string;
+    title: string;
+    description: string;
+    chapters: RoadmapChapter[];
+}
+
+export interface WalkState {
+    id: number;
+    fromX: number; fromY: number;
+    toX: number; toY: number;
+}
+
+export interface CrabWalkerProps {
+    unlockedCount: number;
+}
+
+export interface PinGLBProps {
+    isUnlocked: boolean;
+    isCurrent: boolean;
+    isNext: boolean;
+    isSelected: boolean;
+    accentGlow: string;
+    hovered: boolean;
+}
+
+export interface MapPinModelProps {
+    isUnlocked: boolean;
+    isCurrent: boolean;
+    isNext: boolean;
+    isSelected: boolean;
+    accentGlow: string;
+    hovered: boolean;
+}
+
+export interface PinInfoCardProps {
+    pin: RoadmapPin | null;
+    onClose: () => void;
+}
+
+export interface ProgressBarProps {
+    current: number;
+    total: number;
+}
+
+export interface ResultCardProps {
+    result: EvaluationResult;
+}
+
+export interface PersonaAnswer {
+    _id: string;
+    ans: 0 | 1 | 2 | 3;
+}
+
+export interface EvaluationResult {
+    score: number;
+    total: number;
+    percentage: number;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    learningPath: string;
+}
+
+export interface QuestionOption {
+    label: string;
+}
+
+export interface PersonaQuestion {
+    _id: string;
+    question: string;
+    options: string[];
+}
+
+export interface PersonaQuestionsData {
+    _id: string;
+    role: string;
+    questions: PersonaQuestion[];
+}
+
+export interface QuestionCardProps {
+    question: PersonaQuestion;
+    questionNumber: number;
+    selectedAnswer: number | null;
+    onSelect: (idx: number) => void;
+    direction: number;
+}
+
+export interface LearningPathModule {
+    _id: string;
+    title: string;
+    phase: number;
+    description?: string;
+    role: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    prerequisites: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface LearningPathData {
+    _id: string;
+    userId: string;
+    role: string;
+    type: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    moduleIds: LearningPathModule[];
+    approved: boolean;
+    isSubscribed: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+
+export interface LearningPathHeaderProps {
+    data: LearningPathData;
+    accentText: string;
+}
+
+export interface TimelineCrabProps {
+    /** offsetTop of the currently focused module card (relative to timeline container) */
+    targetY: number;
+    /** Whether the crab should animate walking */
+    walking: boolean;
+}
+
+export interface TimelineModuleCardProps {
+    module: LearningPathModule;
+    index: number;
+    isFocused: boolean;
+    accentColor: string;
+    accentBorder: string;
+    accentText: string;
+    accentGlow: string;
+}
+
+export interface RoleProps {
+    value: string;
+    label: string;
+}
+
+export interface RoleCardProps {
+    role: RoleProps;
+    idx: number;
+    bgGradient: string;
+    Icon: IconType
+}
+
+export interface AssignedPathCardProps {
+    path: any;
+    idx: number;
+}
+
+export interface ModuleChapter {
+    _id: string;
+    title: string;
+    type: string;
+    description: string[];
+    duration: string;
+    azureCode: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ModuleData {
+    _id: string;
+    role: string;
+    phase: number;
+    title: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    prerequisites: string[];
+    chapters: ModuleChapter[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ChapterRowProps {
+    chapter: ModuleChapter;
+    index: number;
+    role: string;
+    total: number;
+}
+
+export interface ChaptersTableProps {
+    chapters: ModuleChapter[];
+    role: string;
 }

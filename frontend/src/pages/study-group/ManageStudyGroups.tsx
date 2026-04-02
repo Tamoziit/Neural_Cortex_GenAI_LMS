@@ -22,7 +22,7 @@ const ManageStudyGroups = () => {
 						className="flex flex-col md:flex-row justify-between items-center gap-6"
 					>
 						<div>
-							<h1 className="text-4xl lg:text-5xl font-serif text-primary mb-2">Manage Study Groups</h1>
+							<h1 className="text-4xl lg:text-5xl text-primary mb-2">Manage Study Groups</h1>
 							<p className="text-gray-300 text-lg">Monitor progress and manage learning roadmaps.</p>
 						</div>
 						

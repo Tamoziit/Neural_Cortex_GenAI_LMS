@@ -5,3 +5,5 @@ export type Group = "academia" | "corporate";
 export type InstitutionType = "institute" | "corporate";
 
 export type DifficultyLevel = "Beginner" | "Intermediate" | "Advanced";
+
+export type NodeLevel = "Beginner" | "Intermediate" | "Advanced";
