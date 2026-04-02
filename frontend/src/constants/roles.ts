@@ -1,4 +1,6 @@
-export const DEFAULT_ROLES = [
+import type { RoleProps } from "../types";
+
+export const DEFAULT_ROLES: RoleProps[] = [
     { value: "Azure_AI_Engineer", label: "Azure AI Engineer" },
     { value: "Azure_DS", label: "Azure Data Scientist" },
     { value: "Azure_Administrator", label: "Azure Administrator" },
