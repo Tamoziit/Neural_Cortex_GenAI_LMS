@@ -1,3 +1,4 @@
+import type { IconType } from "react-icons";
 import type { RoadmapStep } from "../types";
 import {
     FiCpu,
@@ -72,7 +73,7 @@ export const accentBorder: Record<string, string> = {
     "from-rose-400/20 to-rose-500/5": "border-rose-400/30",
 };
 
-export const roleIcons: Record<string, any> = {
+export const roleIcons: Record<string, IconType> = {
     Azure_AI_Engineer: FiCpu,
     Azure_DS: FiActivity,
     Azure_Administrator: FiGrid,

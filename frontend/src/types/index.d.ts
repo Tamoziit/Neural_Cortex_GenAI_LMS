@@ -372,3 +372,56 @@ export interface TimelineModuleCardProps {
     accentText: string;
     accentGlow: string;
 }
+
+export interface RoleProps {
+    value: string;
+    label: string;
+}
+
+export interface RoleCardProps {
+    role: RoleProps;
+    idx: number;
+    bgGradient: string;
+    Icon: IconType
+}
+
+export interface AssignedPathCardProps {
+    path: any;
+    idx: number;
+}
+
+export interface ModuleChapter {
+    _id: string;
+    title: string;
+    type: string;
+    description: string[];
+    duration: string;
+    azureCode: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ModuleData {
+    _id: string;
+    role: string;
+    phase: number;
+    title: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    prerequisites: string[];
+    chapters: ModuleChapter[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ChapterRowProps {
+    chapter: ModuleChapter;
+    index: number;
+    role: string;
+    total: number;
+}
+
+export interface ChaptersTableProps {
+    chapters: ModuleChapter[];
+    role: string;
+}

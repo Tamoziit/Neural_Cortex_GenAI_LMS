@@ -3,6 +3,8 @@ import Question from "../../models/question.model";
 import { PersonaAnswerProps } from "../../types";
 import LearningPath from "../../models/learningPath.model";
 import fetchLearningPathModules from "../../utils/fetchLearningPathModules";
+import Module from "../../models/modules.model";
+import "../../models/chapters.model";
 
 export const personaIdentification = async (req: Request, res: Response) => {
 	try {
@@ -152,6 +154,46 @@ export const getLearningPathById = async (req: Request, res: Response) => {
 		});
 	} catch (error) {
 		console.log("Error in getLearningPathById controller", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export const getAllLearningPaths = async (req: Request, res: Response) => {
+	try {
+		const learningPaths = await LearningPath.find({
+			userId: req.user?._id
+		});
+		if (!learningPaths || !Array.isArray(learningPaths)) {
+			res.status(400).json({ error: "Error in fetching your Learning Paths" });
+			return;
+		}
+
+		res.status(200).json(learningPaths);
+	} catch (error) {
+		console.log("Error in getAllLearningPaths controller", error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export const getModuleById = async (req: Request, res: Response) => {
+	try {
+		const id = req.params.id;
+		if (!id) {
+			res.status(400).json({ error: "Module ID is required" });
+			return;
+		}
+
+		const module = await Module.findById(id).populate({
+			path: "chapters"
+		});
+		if (!module) {
+			res.status(400).json({ error: "Couldn't find a module with this id" });
+			return;
+		}
+
+		res.status(200).json(module);
+	} catch (error) {
+		console.log("Error in getModuleById controller", error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 }
